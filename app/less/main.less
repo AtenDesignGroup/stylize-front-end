@@ -1,0 +1,159 @@
+@import (less) "../../node_modules/normalize.css/normalize.css";
+@import "mixins";
+@import "variables";
+
+@import "scaffolding/base.less";
+@import "scaffolding/typography.less";
+@import "../../node_modules/bootstrap/less/grid.less";
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.wrapper {
+  display: -webkit-flex;
+  display: flex;
+  flex-flow: column wrap
+}
+
+/* Custom page header */
+header {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Make the masthead heading the same height as the navigation */
+header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+  padding-bottom: 19px;
+}
+
+/* Custom page footer */
+footer {
+  height: 50px;
+  padding-top: 20px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+  font-size: 16px;
+}
+
+main {
+  min-height: calc(100vh - 120px);
+  /* flexbox, por favor */
+  .lh-display(flex);
+  .lh-justify-content(center);
+  .lh-align-items(center);
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  margin: 10px;
+}
+
+.jumbotron .btn {
+  font-size: 21px;
+  padding: 14px 24px;
+}
+
+#sg {
+}
+
+.sg-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+}
+
+.sg-drawer-toggle {
+  float: left;
+}
+
+.sg-close-toggle {
+  display: block;
+  background-color: #222;
+  border: 0;
+  width: 100%;
+  font-weight: bold;
+  padding: 12px 30px;
+  text-align: left;
+}
+
+.sg-header-toggles {
+  float: right;
+  text-align: right;
+  width: 400px;
+}
+
+.sg-header-toggles-label {
+  display: inline-block;
+  margin: 0 30px;
+}
+
+.sg-toggles {
+  display: inline-block;
+}
+
+.sg-drawer {
+  display: block;
+  position: fixed;
+  background-color: #363136;
+  color: #fff;
+  height: 100%;
+  width: 300px;
+}
+
+.sg-drawer[aria-expanded="false"],
+.sg-pattern-code[aria-expanded="false"],
+.sg-pattern-info[aria-expanded="false"] {
+  display: none;
+}
+
+.sg-patterns {
+  padding-top: 90px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin: auto;
+  max-width: 896px;
+}
+
+.sg-pattern + .sg-pattern {
+  margin-top: 180px;
+}
+
+.sg-pattern-header {
+  border-bottom: 1px solid #e5e5e5;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+.sg-pattern-title {
+  float: left;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  padding-bottom: 0;
+  color: #666;
+}
+
+.sg-pattern-toggles {
+  float: right;
+}
+
+.sg-pattern-info {
+  padding: 30px 0;
+}
+
+.sg-pattern-frame {
+  border: 1px solid #e5e5e5;
+}

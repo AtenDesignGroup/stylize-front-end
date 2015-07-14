@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  - '0.10'
+before_install:
+  - currentfolder=${PWD##*/}
+  - if [ "$currentfolder" != 'stylizer-front-end' ]; then cd .. && eval "mv $currentfolder stylizer-front-end" && cd stylizer-front-end; fi
