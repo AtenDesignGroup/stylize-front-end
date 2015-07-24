@@ -1,9 +1,9 @@
 // destination for files for testing
 var DEBUG_DESTINATION = "debug";
 
-var less = {
-  sources: 'app/less/**/*.less',
-  main: ['./app/less/main.less'],
+var sass = {
+  sources: 'app/sass/**/*.scss',
+  main: ['./app/sass/main.scss'],
   dest: DEBUG_DESTINATION + '/css'
 };
 
@@ -16,7 +16,7 @@ var extra = {
   sources: [
     'app/**/*.*',
     '!' + react.sources,
-    '!' + less.sources
+    '!' + sass.sources
   ],
   dest : DEBUG_DESTINATION
 };
@@ -49,7 +49,7 @@ var browserify = {
 
 module.exports = {
   debugDestination: DEBUG_DESTINATION,
-  less: less,
+  sass: sass,
   react: react,
   extra: extra,
   dist: dist,
