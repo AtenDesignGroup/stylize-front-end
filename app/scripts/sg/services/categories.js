@@ -8,13 +8,13 @@ module.exports = [
     id: "typography",
     name: "Typography",
     weight: 0,
-    parent: "base"
+    parentId: "base"
   },
   {
     id: "colors",
     name: "Colors",
     weight: 0,
-    parent: "base"
+    parentId: "base"
   },
   {
     id: "objects",
@@ -30,19 +30,19 @@ module.exports = [
     id: "blocks",
     name: "Blocks",
     weight: 0,
-    parent: "components"
+    parentId: "components"
   },
   {
     id: "collections",
     name: "Collections",
     weight: 0,
-    parent: "components"
+    parentId: "components"
   },
   {
     id: "teasers",
     name: "Teasers",
     weight: 0,
-    parent: "components"
+    parentId: "components"
   },
   {
     id: "templates",

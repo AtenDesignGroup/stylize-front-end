@@ -22,13 +22,13 @@ module.exports = [
     id: "typography",
     name: "Typography",
     weight: 0,
-    parent: "base"
+    parentId: "base"
   },
   {
     id: "colors",
     name: "Colors",
     weight: 0,
-    parent: "base"
+    parentId: "base"
   },
   {
     id: "objects",
@@ -44,19 +44,19 @@ module.exports = [
     id: "blocks",
     name: "Blocks",
     weight: 0,
-    parent: "components"
+    parentId: "components"
   },
   {
     id: "collections",
     name: "Collections",
     weight: 0,
-    parent: "components"
+    parentId: "components"
   },
   {
     id: "teasers",
     name: "Teasers",
     weight: 0,
-    parent: "components"
+    parentId: "components"
   },
   {
     id: "templates",
@@ -134,6 +134,7 @@ var Sgdrawer = require('./sgdrawer');
 var Sgcontent = require('./sgcontent');
 var patterns = require('./services/patterns');
 var categories = require('./services/categories');
+var _ = require('lodash');
 
 var sg = React.createClass({
   displayName: 'sg',
@@ -145,16 +146,44 @@ var sg = React.createClass({
     };
   },
 
+  unflatten: function( array, parent, tree ){
+    tree = typeof tree !== 'undefined' ? tree : [];
+    parent = typeof parent !== 'undefined' ? parent : {};
+    var that = this;
+
+    var children = _.filter(
+      array,
+      function(child) {
+        return child.parentId == parent.id; }
+    );
+
+    if (!_.isEmpty( children )){
+      if( parent.id == undefined ){
+        tree = children;
+      } else {
+        parent['children'] = children
+      }
+      _.each(
+        children,
+        function(child){ that.unflatten( array, child ); }
+      );
+    }
+    return tree;
+  },
+
   handleDrawerToggleClick: function(e){
     this.setState({
       drawerExpanded: !this.state.drawerExpanded
     });
   },
+
   render: function () {
+    var categoryTree = this.unflatten(this.state.categories);
+
     return (
       React.createElement("div", null, 
         React.createElement(Sgheader, {onDrawerToggleClick: this.handleDrawerToggleClick, expanded: this.state.drawerExpanded}), 
-        React.createElement(Sgdrawer, {onDrawerToggleClick: this.handleDrawerToggleClick, expanded: this.state.drawerExpanded, categories: this.state.categories}), 
+        React.createElement(Sgdrawer, {onDrawerToggleClick: this.handleDrawerToggleClick, expanded: this.state.drawerExpanded, tree: categoryTree}), 
         React.createElement(Sgcontent, {patterns: this.state.patterns})
       )
     );
@@ -163,7 +192,7 @@ var sg = React.createClass({
 
 module.exports = sg;
 
-},{"./services/categories":2,"./services/patterns":3,"./sgcontent":5,"./sgdrawer":6,"./sgheader":7,"react":"react"}],5:[function(require,module,exports){
+},{"./services/categories":2,"./services/patterns":3,"./sgcontent":5,"./sgdrawer":6,"./sgheader":7,"lodash":10,"react":"react"}],5:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react');
 var Sgpattern = require('./sgpattern');
@@ -193,6 +222,7 @@ module.exports = sgcontent;
 },{"./sgpattern":8,"react":"react"}],6:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react/addons'),
+    SgTree = require('./sgtree'),
     _ = require('lodash');
 
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -202,12 +232,8 @@ var sgdrawer = React.createClass({displayName: "sgdrawer",
     return (
       React.createElement(ReactCSSTransitionGroup, {transitionName: "drawer"}, 
         React.createElement("div", {id: "sg-drawer", className: "sg-drawer", "aria-expanded": this.props.expanded}, 
-        React.createElement("button", {className: "sg-close-toggle", onClick: this.props.onDrawerToggleClick, "aria-expanded": this.props.expanded, "aria-controls": "sg-drawer"}, "Close"), 
-        React.createElement("ul", {className: "", key: "1"}, 
-          this.props.categories.map(function(category) {
-            return React.createElement("li", {key: category.id}, category.name);
-          })
-        )
+          React.createElement("button", {className: "sg-close-toggle", onClick: this.props.onDrawerToggleClick, "aria-expanded": this.props.expanded, "aria-controls": "sg-drawer"}, "Close"), 
+          React.createElement(SgTree, {className: "sg-menu", tree: this.props.tree})
         )
       )
     );
@@ -216,7 +242,7 @@ var sgdrawer = React.createClass({displayName: "sgdrawer",
 
 module.exports = sgdrawer;
 
-},{"lodash":9,"react/addons":"react/addons"}],7:[function(require,module,exports){
+},{"./sgtree":9,"lodash":10,"react/addons":"react/addons"}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react');
 
@@ -293,6 +319,66 @@ var sgpattern = React.createClass({
 module.exports = sgpattern;
 
 },{"react":"react"}],9:[function(require,module,exports){
+/** @jsx React.DOM */
+var React = require('react'),
+    _ = require('lodash'),
+    TreeView = require('react-treeview');
+
+var SgTree = React.createClass({displayName: "SgTree",
+  getInitialState: function() {
+    var collapsedBookkeeping = this.props.tree.map(function() {
+      return false;
+    });
+    return {
+      collapsedBookkeeping: collapsedBookkeeping
+    };
+  },
+
+  handleClick: function(i) {
+    this.state.collapsedBookkeeping[i] = !this.state.collapsedBookkeeping[i];
+    this.setState({collapsedBookkeeping: this.state.collapsedBookkeeping});
+  },
+
+  collapseAll: function() {
+    this.setState({
+      collapsedBookkeeping: this.state.collapsedBookkeeping.map(function() {return true;})
+    });
+  },
+
+  render: function() {
+    var collapsedBookkeeping = this.state.collapsedBookkeeping;
+
+    return (
+      React.createElement("div", null, 
+        this.props.tree.map(function(node, i) {
+          var name = node.name;
+          var label = React.createElement("span", {className: "node"}, name);
+          var children = "";
+
+          if (node.children) {
+            children = node.children.map(function(category, j) {
+              var label = React.createElement("span", {className: "node"}, category.name);
+              return (
+                React.createElement(TreeView, {nodeLabel: label, key: category.id}
+                )
+              );
+            });
+          }
+
+          return (
+            React.createElement(TreeView, {key: this.props.id + '|' + i, nodeLabel: label, collapsed: collapsedBookkeeping[i]}, 
+              children
+            )
+          );
+        }, this)
+      )
+    );
+  }
+});
+
+module.exports = SgTree;
+
+},{"lodash":10,"react":"react","react-treeview":11}],10:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -7082,4 +7168,80 @@ module.exports = sgpattern;
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1]);
+},{}],11:[function(require,module,exports){
+(function (root, React, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD.
+    var carry = function(React){
+      return factory(root, React);
+    };
+    define(['react'], carry);
+  } else {
+    // Browser globals
+    root.TreeView = factory(root, React);
+  }
+})(this, typeof require === 'function' ? require('react') : React, function(window, React){
+  'use strict';
+
+  var TreeView = React.createClass({displayName: 'TreeView',
+    propTypes: {
+      collapsed: React.PropTypes.bool,
+      defaultCollapsed: React.PropTypes.bool,
+      nodeLabel: React.PropTypes.node.isRequired
+    },
+
+    getInitialState: function() {
+      return {collapsed: this.props.defaultCollapsed};
+    },
+
+    handleClick: function(a, b, c) {
+      this.setState({
+        collapsed: !this.state.collapsed
+      });
+      this.props.onClick && this.props.onClick(a, b, c);
+    },
+
+    render: function() {
+      var props = this.props;
+
+      var collapsed = props.collapsed != null ?
+        props.collapsed :
+        this.state.collapsed;
+
+      var arrowClassName = 'tree-view_arrow';
+      var containerClassName = 'tree-view_children';
+      if (collapsed) {
+        arrowClassName += ' tree-view_arrow-collapsed';
+        containerClassName += ' tree-view_children-collapsed';
+      }
+
+      var arrow =
+        React.createElement("div", React.__spread({}, 
+          props, 
+          {className: (props.className || '') + ' ' + arrowClassName, 
+          onClick: this.handleClick}), 
+            "▾"
+        );
+
+      return (
+        React.createElement("div", {className: "tree-view"}, 
+          arrow, 
+          props.nodeLabel, 
+          React.createElement("div", {className: containerClassName}, 
+            props.children
+          )
+        )
+      );
+    }
+  });
+
+  if (typeof module === 'undefined') {
+    window.TreeView = TreeView;
+  } else {
+    module.exports = TreeView;
+  }
+
+  return TreeView;
+});
+
+},{"react":"react"}]},{},[1]);

@@ -110,6 +110,11 @@ main {
   width: 300px;
 }
 
+.sg-tree {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
 .sg-drawer[aria-expanded="false"],
 .sg-pattern-code[aria-expanded="false"],
 .sg-pattern-info[aria-expanded="false"] {
@@ -156,4 +161,30 @@ main {
 
 .sg-pattern-frame {
   border: 1px solid #e5e5e5;
+}
+
+// TreeView
+
+.tree-view {
+  text-transform: uppercase;
+
+  > .node {
+    font-weight: 600;
+  }
+}
+
+.tree-view_arrow {
+  color: yellow;
+  float: left;
+  width: 1em;
+}
+
+.tree-view_children .tree-view {
+  padding-left: 1em;
+  text-transform: none;
+  font-weight: normal;
+
+  > .node {
+    font-weight: 600;
+  }
 }
