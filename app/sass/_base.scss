@@ -9,11 +9,11 @@
 // For recommendations on resolving such conflicts, see
 // http://getbootstrap.com/getting-started/#third-box-sizing
 * {
-  .lh-box-sizing(border-box);
+  box-sizing: border-box;
 }
 *:before,
 *:after {
-  .lh-box-sizing(border-box);
+  box-sizing: border-box;
 }
 
 // Body reset
@@ -24,11 +24,11 @@ html {
 }
 
 body {
-  font-family: @font-family-base;
-  font-size: @font-size-base;
-  line-height: @line-height-base;
-  color: @text-color;
-  background-color: @body-bg;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $text-color;
+  background-color: $body-bg;
 }
 
 // Reset fonts for relevant elements
