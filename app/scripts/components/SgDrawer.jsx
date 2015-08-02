@@ -1,11 +1,11 @@
 /** @jsx React.DOM */
 var React = require('react/addons'),
-    SgTree = require('./sgtree'),
+    SgTree = require('./SgTree'),
     _ = require('lodash');
 
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-var sgdrawer = React.createClass({
+var SgDrawer = React.createClass({
   render: function() {
     return (
       <ReactCSSTransitionGroup transitionName="drawer">
@@ -18,4 +18,4 @@ var sgdrawer = React.createClass({
   }
 });
 
-module.exports = sgdrawer;
+module.exports = SgDrawer;

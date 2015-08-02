@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 
-var sgpattern = React.createClass({
+var SgPattern = React.createClass({
   displayName: 'sgpattern',
 
   getInitialState: function() {
@@ -47,4 +47,4 @@ var sgpattern = React.createClass({
   }
 });
 
-module.exports = sgpattern;
+module.exports = SgPattern;

@@ -1,6 +1,13 @@
 #sg {
 }
 
+button {
+  &:hover,
+  &:focus {
+    cursor: pointer;
+  }
+}
+
 .sg-header {
   position: fixed;
   top: 0;
@@ -22,6 +29,12 @@
   font-weight: bold;
   padding: 12px 30px;
   text-align: left;
+}
+
+.sg-drawer-toggle {
+  background: none;
+  text-transform: uppercase;
+  border: 0;
 }
 
 .sg-header-toggles {
@@ -46,6 +59,9 @@
   color: #fff;
   height: 100%;
   width: 300px;
+  top: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .sg-tree {

@@ -10,6 +10,9 @@ gulp.task('browserSync', ['build'], function () {
     ],
     watchOptions: {
       debounceDelay: 1000
+    },
+    ui: {
+      port: 8081
     }
   });
 });

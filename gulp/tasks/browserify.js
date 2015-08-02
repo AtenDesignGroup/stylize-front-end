@@ -25,7 +25,7 @@ gulp.task('browserify', function (cb) {
       // Specify the entry point of your app
       entries: file.src,
       // Add file extentions to make optional in your requires
-      extensions: ['.js'],
+      extensions: ['.js', '.jsx'],
       cache: {},
       packageCache: {},
       fullPaths: false,
@@ -75,8 +75,6 @@ gulp.task('browserify', function (cb) {
       watchify(bundler);
     });
   }
-
-
 
   if (global.isWatching) {
     // Rebundle with watchify on changes.

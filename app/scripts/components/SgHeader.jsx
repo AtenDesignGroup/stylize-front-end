@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 
-var sgheader = React.createClass({
+var SgHeader = React.createClass({
   displayName: 'sgheader',
   render: function () {
     return (
@@ -19,4 +19,4 @@ var sgheader = React.createClass({
   }
 });
 
-module.exports = sgheader;
+module.exports = SgHeader;

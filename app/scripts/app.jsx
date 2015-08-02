@@ -3,9 +3,5 @@
 /*global React */
 
 var React = require('react');
-var Sg = require('./sg/sg');
-
-React.render(
-  <Sg />,
-  document.getElementById('sg')
-);
+var options = require('./data');
+require('static-react-router/app')(options);

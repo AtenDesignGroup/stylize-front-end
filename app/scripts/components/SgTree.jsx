@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 var React = require('react'),
     _ = require('lodash'),
+    Router = require('react-router'),
+    Link = Router.Link,
     TreeView = require('react-treeview');
 
 var SgTree = React.createClass({
@@ -33,12 +35,15 @@ var SgTree = React.createClass({
           var name = node.name;
           var label = <span className="node">{name}</span>;
           var children = "";
+          var path = "category/" + node.id;
 
           if (node.children) {
             children = node.children.map(function(category, j) {
               var label = <span className="node">{category.name}</span>;
+              var subpath = "category/" + category.id;
               return (
                 <TreeView nodeLabel={label} key={category.id} >
+                  <Link to={subpath}>Show All</Link>
                 </TreeView>
               );
             });
@@ -47,6 +52,7 @@ var SgTree = React.createClass({
           return (
             <TreeView key={this.props.id + '|' + i} nodeLabel={label} collapsed={collapsedBookkeeping[i]}>
               {children}
+              <Link to={path}>Show All</Link>
             </TreeView>
           );
         }, this)}

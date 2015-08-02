@@ -1,14 +1,14 @@
 /** @jsx React.DOM */
 var React = require('react');
-var Sgpattern = require('./sgpattern');
+var SgPattern = require('./SgPattern');
 
-var sgcontent = React.createClass({
+var SgContent = React.createClass({
   displayName: 'sgcontent',
   render: function () {
     return (
       <div className="sg-patterns">
       {this.props.patterns.map(function(pattern) {
-        return <Sgpattern
+        return <SgPattern
           key={pattern.id}
           id={pattern.id}
           name={pattern.name}
@@ -22,4 +22,4 @@ var sgcontent = React.createClass({
   }
 });
 
-module.exports = sgcontent;
+module.exports = SgContent;
