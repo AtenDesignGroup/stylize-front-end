@@ -27,6 +27,7 @@ var categoryRoutes = categories.map(function(category) {
     handler: Category,
   }
 });
+
 // Add category routes to the existing routes.
 routes = routes.concat(categoryRoutes);
 

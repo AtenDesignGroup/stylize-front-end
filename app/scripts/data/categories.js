@@ -5,20 +5,13 @@ module.exports = [
     weight: 0,
   },
   {
-    id: "typography",
-    name: "Typography",
-    weight: 0,
-    parentId: "base"
-  },
-  {
-    id: "colors",
-    name: "Colors",
-    weight: 0,
-    parentId: "base"
-  },
-  {
     id: "objects",
     name: "Objects",
+    weight: 0,
+  },
+  {
+    id: "objects/ui",
+    name: "UI",
     weight: 0,
   },
   {
@@ -27,19 +20,19 @@ module.exports = [
     weight: 0,
   },
   {
-    id: "blocks",
+    id: "components/blocks",
     name: "Blocks",
     weight: 0,
     parentId: "components"
   },
   {
-    id: "collections",
+    id: "components/collections",
     name: "Collections",
     weight: 0,
     parentId: "components"
   },
   {
-    id: "teasers",
+    id: "components/teasers",
     name: "Teasers",
     weight: 0,
     parentId: "components"

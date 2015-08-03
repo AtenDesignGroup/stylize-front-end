@@ -9,11 +9,11 @@ var Category = React.createClass({
 
   render: function () {
     var path = this.getPathname();
-    var category = path.split('/').pop();
+    var category = path.split('/').slice(2).join('/');
     var patterns = _.filter(
       this.props.patterns,
       function(pattern) {
-        return pattern.category === category;
+        return _.startsWith(pattern.category, category);
       }
     );
 

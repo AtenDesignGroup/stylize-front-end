@@ -2,7 +2,7 @@ module.exports =  [
   {
     id: "colors",
     name: "Colors",
-    category: "colors",
+    category: "base",
     weight: 0,
     description: "These are the colors in use.",
     url: "These are the colors in use."
@@ -10,7 +10,7 @@ module.exports =  [
   {
     id: "buttons",
     name: "Buttons",
-    category: "objects",
+    category: "objects/ui",
     weight: 0,
     description: "Default button style",
     code: "<button>Button</button>",
@@ -21,7 +21,7 @@ module.exports =  [
   {
     id: "profile",
     name: "Profile",
-    category: "teasers",
+    category: "components/teasers",
     weight: 0,
     description: "User profile",
     uri: "teasers/profile.html",
@@ -33,7 +33,7 @@ module.exports =  [
   {
     id: "teaser",
     name: "Teaser",
-    category: "teasers",
+    category: "components/teasers",
     weight: 0,
     uri: "teasers/teaser.html",
     description: "Generic article teaser",
@@ -48,7 +48,7 @@ module.exports =  [
   {
     id: "river",
     name: "River of News",
-    category: "collections",
+    category: "components/collections",
     weight: 0,
     uri: "collections/river.html",
     description: "Generic list of articles.",

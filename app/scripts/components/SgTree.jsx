@@ -51,8 +51,8 @@ var SgTree = React.createClass({
 
           return (
             <TreeView key={this.props.id + '|' + i} nodeLabel={label} collapsed={collapsedBookkeeping[i]}>
-              {children}
               <Link to={path}>Show All</Link>
+              {children}
             </TreeView>
           );
         }, this)}
