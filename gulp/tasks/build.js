@@ -9,5 +9,5 @@ gulp.task('build-static', function (callback) {
 });
 
 gulp.task('build', function (callback) {
-  runSequence(['clean'],['react', 'copyExtra', 'sass'], [ 'browserify'], ['build-static']);
+  runSequence(['clean'],['react', 'copyExtra', 'sass'],['browserify'],['build-static'], callback);
 });
