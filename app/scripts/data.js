@@ -1,5 +1,4 @@
 var path = require('path');
-var pkg = require('../../package.json');
 
 // Project specific data
 var patterns = require('./data/patterns');
@@ -40,9 +39,7 @@ module.exports = {
   ],
   dest: path.join(__dirname, '../../debug/'),
   props: {
-    name: pkg.name,
-    description: pkg.description,
-    version: pkg.version,
+    name: 'test site name make dynamic',
     baseUrl: baseUrl,
     routes: routes,
     stylesheets: [ '/css/main.css' ],

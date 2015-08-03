@@ -9,28 +9,7 @@ require('static-react-router/app')(options);
 
 grunticon(["/img/svg/icons.data.svg.css", "/img/svg/icons.data.png.css", "/img/svg/icons.fallback.css"], grunticon.svgLoadedCallback);
 
-},{"./data":11,"react":"react","static-react-router/app":65}],2:[function(require,module,exports){
-module.exports={
-  "name": "gulp-libsass-boilerplate",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pixelwhip/gulp-libsass-boilerplate"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/pixelwhip/gulp-libsass-boilerplate/issues"
-  },
-  "homepage": "https://github.com/pixelwhip/gulp-libsass-boilerplate"
-}
-
-},{}],3:[function(require,module,exports){
+},{"./data":10,"react":"react","static-react-router/app":64}],2:[function(require,module,exports){
 // components/Category.jsx
 var React = require('react');
 var Router = require('react-router');
@@ -68,7 +47,7 @@ var Category = React.createClass({displayName: "Category",
 
 module.exports = Category
 
-},{"./SgPattern":9,"lodash":16,"react":"react","react-router":45}],4:[function(require,module,exports){
+},{"./SgPattern":8,"lodash":15,"react":"react","react-router":44}],3:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react');
 
@@ -85,7 +64,7 @@ var IconButton = React.createClass({displayName: "IconButton",
 
 module.exports = IconButton;
 
-},{"react":"react"}],5:[function(require,module,exports){
+},{"react":"react"}],4:[function(require,module,exports){
 // components/Index.jsx
 var React = require('react')
 var SgPattern = require('./SgPattern');
@@ -110,7 +89,7 @@ var Index = React.createClass({displayName: "Index",
 
 module.exports = Index
 
-},{"./SgPattern":9,"react":"react"}],6:[function(require,module,exports){
+},{"./SgPattern":8,"react":"react"}],5:[function(require,module,exports){
 // components/Root
 var React = require('react')
 var Router = require('react-router')
@@ -187,7 +166,7 @@ function safeStringify(obj) {
 
 module.exports = Root
 
-},{"./SgDrawer":7,"./SgHeader":8,"lodash":16,"react":"react","react-html":17,"react-router":45}],7:[function(require,module,exports){
+},{"./SgDrawer":6,"./SgHeader":7,"lodash":15,"react":"react","react-html":16,"react-router":44}],6:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react/addons'),
     SgTree = require('./SgTree'),
@@ -211,7 +190,7 @@ var SgDrawer = React.createClass({displayName: "SgDrawer",
 
 module.exports = SgDrawer;
 
-},{"./IconButton":4,"./SgTree":10,"lodash":16,"react/addons":"react/addons"}],8:[function(require,module,exports){
+},{"./IconButton":3,"./SgTree":9,"lodash":15,"react/addons":"react/addons"}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react');
 var IconButton = require('./IconButton');
@@ -236,7 +215,7 @@ var SgHeader = React.createClass({
 
 module.exports = SgHeader;
 
-},{"./IconButton":4,"react":"react"}],9:[function(require,module,exports){
+},{"./IconButton":3,"react":"react"}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react');
 var IconButton = require('./IconButton');
@@ -289,7 +268,7 @@ var SgPattern = React.createClass({
 
 module.exports = SgPattern;
 
-},{"./IconButton":4,"react":"react"}],10:[function(require,module,exports){
+},{"./IconButton":3,"react":"react"}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     _ = require('lodash'),
@@ -355,10 +334,9 @@ var SgTree = React.createClass({displayName: "SgTree",
 
 module.exports = SgTree;
 
-},{"lodash":16,"react":"react","react-router":45,"react-treeview":58}],11:[function(require,module,exports){
+},{"lodash":15,"react":"react","react-router":44,"react-treeview":57}],10:[function(require,module,exports){
 (function (__dirname){
 var path = require('path');
-var pkg = require('../../package.json');
 
 // Project specific data
 var patterns = require('./data/patterns');
@@ -399,9 +377,7 @@ module.exports = {
   ],
   dest: path.join(__dirname, '../../debug/'),
   props: {
-    name: pkg.name,
-    description: pkg.description,
-    version: pkg.version,
+    name: 'test site name make dynamic',
     baseUrl: baseUrl,
     routes: routes,
     stylesheets: [ '/css/main.css' ],
@@ -418,7 +394,7 @@ module.exports = {
 };
 
 }).call(this,"/compiled")
-},{"../../package.json":2,"./components/Category":3,"./components/Index":5,"./components/Root":6,"./data/categories":12,"./data/patterns":13,"path":14}],12:[function(require,module,exports){
+},{"./components/Category":2,"./components/Index":4,"./components/Root":5,"./data/categories":11,"./data/patterns":12,"path":13}],11:[function(require,module,exports){
 module.exports = [
   {
     id: "base",
@@ -472,7 +448,7 @@ module.exports = [
   }
 ];
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 module.exports =  [
   {
     id: "colors",
@@ -533,7 +509,7 @@ module.exports =  [
   }
 ];
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -761,7 +737,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":15}],15:[function(require,module,exports){
+},{"_process":14}],14:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -821,7 +797,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -7611,7 +7587,7 @@ process.umask = function() { return 0; };
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],17:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 
 var React = require('react');
 
@@ -7698,7 +7674,7 @@ Html.Head = React.createClass({displayName: "Head",
 module.exports = Html;
 
 
-},{"react":"react"}],18:[function(require,module,exports){
+},{"react":"react"}],17:[function(require,module,exports){
 "use strict";
 
 /**
@@ -7708,7 +7684,7 @@ module.exports = Html;
 function Cancellation() {}
 
 module.exports = Cancellation;
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 var warning = require("react/lib/warning");
@@ -7741,7 +7717,7 @@ var Configuration = {
 };
 
 module.exports = Configuration;
-},{"react/lib/invariant":63,"react/lib/warning":64}],20:[function(require,module,exports){
+},{"react/lib/invariant":62,"react/lib/warning":63}],19:[function(require,module,exports){
 "use strict";
 
 var invariant = require("react/lib/invariant");
@@ -7772,7 +7748,7 @@ var History = {
 };
 
 module.exports = History;
-},{"react/lib/ExecutionEnvironment":59,"react/lib/invariant":63}],21:[function(require,module,exports){
+},{"react/lib/ExecutionEnvironment":58,"react/lib/invariant":62}],20:[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -7852,7 +7828,7 @@ var Match = (function () {
 })();
 
 module.exports = Match;
-},{"./PathUtils":24}],22:[function(require,module,exports){
+},{"./PathUtils":23}],21:[function(require,module,exports){
 "use strict";
 
 var PropTypes = require("./PropTypes");
@@ -7927,7 +7903,7 @@ var Navigation = {
 };
 
 module.exports = Navigation;
-},{"./PropTypes":25}],23:[function(require,module,exports){
+},{"./PropTypes":24}],22:[function(require,module,exports){
 "use strict";
 
 var PropTypes = require("./PropTypes");
@@ -7958,7 +7934,7 @@ var NavigationContext = {
 };
 
 module.exports = NavigationContext;
-},{"./PropTypes":25}],24:[function(require,module,exports){
+},{"./PropTypes":24}],23:[function(require,module,exports){
 "use strict";
 
 var invariant = require("react/lib/invariant");
@@ -8112,7 +8088,7 @@ var PathUtils = {
 };
 
 module.exports = PathUtils;
-},{"qs":53,"qs/lib/utils":57,"react/lib/invariant":63}],25:[function(require,module,exports){
+},{"qs":52,"qs/lib/utils":56,"react/lib/invariant":62}],24:[function(require,module,exports){
 "use strict";
 
 var assign = require("react/lib/Object.assign");
@@ -8132,7 +8108,7 @@ var PropTypes = assign({
 }, ReactPropTypes);
 
 module.exports = PropTypes;
-},{"react":"react","react/lib/Object.assign":60}],26:[function(require,module,exports){
+},{"react":"react","react/lib/Object.assign":59}],25:[function(require,module,exports){
 "use strict";
 
 /**
@@ -8145,7 +8121,7 @@ function Redirect(to, params, query) {
 }
 
 module.exports = Redirect;
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -8365,7 +8341,7 @@ var Route = (function () {
 })();
 
 module.exports = Route;
-},{"./PathUtils":24,"react/lib/Object.assign":60,"react/lib/invariant":63,"react/lib/warning":64}],28:[function(require,module,exports){
+},{"./PathUtils":23,"react/lib/Object.assign":59,"react/lib/invariant":62,"react/lib/warning":63}],27:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -8420,7 +8396,7 @@ var RouteHandlerMixin = {
 };
 
 module.exports = RouteHandlerMixin;
-},{"./PropTypes":25,"react":"react","react/lib/Object.assign":60}],29:[function(require,module,exports){
+},{"./PropTypes":24,"react":"react","react/lib/Object.assign":59}],28:[function(require,module,exports){
 "use strict";
 
 var invariant = require("react/lib/invariant");
@@ -8496,7 +8472,7 @@ var ScrollHistory = {
 };
 
 module.exports = ScrollHistory;
-},{"./getWindowScrollPosition":44,"react/lib/ExecutionEnvironment":59,"react/lib/invariant":63}],30:[function(require,module,exports){
+},{"./getWindowScrollPosition":43,"react/lib/ExecutionEnvironment":58,"react/lib/invariant":62}],29:[function(require,module,exports){
 "use strict";
 
 var PropTypes = require("./PropTypes");
@@ -8576,7 +8552,7 @@ var State = {
 };
 
 module.exports = State;
-},{"./PropTypes":25}],31:[function(require,module,exports){
+},{"./PropTypes":24}],30:[function(require,module,exports){
 "use strict";
 
 var assign = require("react/lib/Object.assign");
@@ -8673,7 +8649,7 @@ var StateContext = {
 };
 
 module.exports = StateContext;
-},{"./PathUtils":24,"./PropTypes":25,"react/lib/Object.assign":60}],32:[function(require,module,exports){
+},{"./PathUtils":23,"./PropTypes":24,"react/lib/Object.assign":59}],31:[function(require,module,exports){
 "use strict";
 
 /* jshint -W058 */
@@ -8749,7 +8725,7 @@ Transition.to = function (transition, routes, params, query, callback) {
 };
 
 module.exports = Transition;
-},{"./Cancellation":18,"./Redirect":26}],33:[function(require,module,exports){
+},{"./Cancellation":17,"./Redirect":25}],32:[function(require,module,exports){
 "use strict";
 
 /**
@@ -8775,7 +8751,7 @@ var LocationActions = {
 };
 
 module.exports = LocationActions;
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
 var LocationActions = require("../actions/LocationActions");
@@ -8805,7 +8781,7 @@ var ImitateBrowserBehavior = {
 };
 
 module.exports = ImitateBrowserBehavior;
-},{"../actions/LocationActions":33}],35:[function(require,module,exports){
+},{"../actions/LocationActions":32}],34:[function(require,module,exports){
 "use strict";
 
 /**
@@ -8821,7 +8797,7 @@ var ScrollToTopBehavior = {
 };
 
 module.exports = ScrollToTopBehavior;
-},{}],36:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -8850,7 +8826,7 @@ var DefaultRoute = React.createClass({
 });
 
 module.exports = DefaultRoute;
-},{"../Configuration":19,"../PropTypes":25,"react":"react"}],37:[function(require,module,exports){
+},{"../Configuration":18,"../PropTypes":24,"react":"react"}],36:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -8963,7 +8939,7 @@ var Link = React.createClass({
 });
 
 module.exports = Link;
-},{"../Navigation":22,"../PropTypes":25,"../Route":27,"../State":30,"react":"react","react/lib/Object.assign":60,"react/lib/cx":61}],38:[function(require,module,exports){
+},{"../Navigation":21,"../PropTypes":24,"../Route":26,"../State":29,"react":"react","react/lib/Object.assign":59,"react/lib/cx":60}],37:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -8993,7 +8969,7 @@ var NotFoundRoute = React.createClass({
 });
 
 module.exports = NotFoundRoute;
-},{"../Configuration":19,"../PropTypes":25,"react":"react"}],39:[function(require,module,exports){
+},{"../Configuration":18,"../PropTypes":24,"react":"react"}],38:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -9020,7 +8996,7 @@ var Redirect = React.createClass({
 });
 
 module.exports = Redirect;
-},{"../Configuration":19,"../PropTypes":25,"react":"react"}],40:[function(require,module,exports){
+},{"../Configuration":18,"../PropTypes":24,"react":"react"}],39:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -9089,7 +9065,7 @@ var Route = React.createClass({
 });
 
 module.exports = Route;
-},{"../Configuration":19,"../PropTypes":25,"./RouteHandler":41,"react":"react"}],41:[function(require,module,exports){
+},{"../Configuration":18,"../PropTypes":24,"./RouteHandler":40,"react":"react"}],40:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -9112,7 +9088,7 @@ var RouteHandler = React.createClass({
 });
 
 module.exports = RouteHandler;
-},{"../RouteHandlerMixin":28,"react":"react"}],42:[function(require,module,exports){
+},{"../RouteHandlerMixin":27,"react":"react"}],41:[function(require,module,exports){
 (function (process){
 "use strict";
 
@@ -9571,7 +9547,7 @@ function createRouter(options) {
 
 module.exports = createRouter;
 }).call(this,require('_process'))
-},{"./Cancellation":18,"./History":20,"./Match":21,"./NavigationContext":23,"./PathUtils":24,"./PropTypes":25,"./Redirect":26,"./Route":27,"./ScrollHistory":29,"./StateContext":31,"./Transition":32,"./actions/LocationActions":33,"./behaviors/ImitateBrowserBehavior":34,"./createRoutesFromReactChildren":43,"./isReactChildren":46,"./locations/HashLocation":47,"./locations/HistoryLocation":48,"./locations/RefreshLocation":49,"./locations/StaticLocation":50,"./supportsHistory":52,"_process":15,"react":"react","react/lib/ExecutionEnvironment":59,"react/lib/invariant":63,"react/lib/warning":64}],43:[function(require,module,exports){
+},{"./Cancellation":17,"./History":19,"./Match":20,"./NavigationContext":22,"./PathUtils":23,"./PropTypes":24,"./Redirect":25,"./Route":26,"./ScrollHistory":28,"./StateContext":30,"./Transition":31,"./actions/LocationActions":32,"./behaviors/ImitateBrowserBehavior":33,"./createRoutesFromReactChildren":42,"./isReactChildren":45,"./locations/HashLocation":46,"./locations/HistoryLocation":47,"./locations/RefreshLocation":48,"./locations/StaticLocation":49,"./supportsHistory":51,"_process":14,"react":"react","react/lib/ExecutionEnvironment":58,"react/lib/invariant":62,"react/lib/warning":63}],42:[function(require,module,exports){
 "use strict";
 
 /* jshint -W084 */
@@ -9654,7 +9630,7 @@ function createRoutesFromReactChildren(children) {
 }
 
 module.exports = createRoutesFromReactChildren;
-},{"./Route":27,"./components/DefaultRoute":36,"./components/NotFoundRoute":38,"./components/Redirect":39,"react":"react","react/lib/Object.assign":60,"react/lib/warning":64}],44:[function(require,module,exports){
+},{"./Route":26,"./components/DefaultRoute":35,"./components/NotFoundRoute":37,"./components/Redirect":38,"react":"react","react/lib/Object.assign":59,"react/lib/warning":63}],43:[function(require,module,exports){
 "use strict";
 
 var invariant = require("react/lib/invariant");
@@ -9673,7 +9649,7 @@ function getWindowScrollPosition() {
 }
 
 module.exports = getWindowScrollPosition;
-},{"react/lib/ExecutionEnvironment":59,"react/lib/invariant":63}],45:[function(require,module,exports){
+},{"react/lib/ExecutionEnvironment":58,"react/lib/invariant":62}],44:[function(require,module,exports){
 "use strict";
 
 exports.DefaultRoute = require("./components/DefaultRoute");
@@ -9703,7 +9679,7 @@ exports.createRedirect = require("./Route").createRedirect;
 exports.createRoutesFromReactChildren = require("./createRoutesFromReactChildren");
 exports.create = require("./createRouter");
 exports.run = require("./runRouter");
-},{"./History":20,"./Navigation":22,"./Route":27,"./RouteHandlerMixin":28,"./State":30,"./behaviors/ImitateBrowserBehavior":34,"./behaviors/ScrollToTopBehavior":35,"./components/DefaultRoute":36,"./components/Link":37,"./components/NotFoundRoute":38,"./components/Redirect":39,"./components/Route":40,"./components/RouteHandler":41,"./createRouter":42,"./createRoutesFromReactChildren":43,"./locations/HashLocation":47,"./locations/HistoryLocation":48,"./locations/RefreshLocation":49,"./locations/StaticLocation":50,"./runRouter":51}],46:[function(require,module,exports){
+},{"./History":19,"./Navigation":21,"./Route":26,"./RouteHandlerMixin":27,"./State":29,"./behaviors/ImitateBrowserBehavior":33,"./behaviors/ScrollToTopBehavior":34,"./components/DefaultRoute":35,"./components/Link":36,"./components/NotFoundRoute":37,"./components/Redirect":38,"./components/Route":39,"./components/RouteHandler":40,"./createRouter":41,"./createRoutesFromReactChildren":42,"./locations/HashLocation":46,"./locations/HistoryLocation":47,"./locations/RefreshLocation":48,"./locations/StaticLocation":49,"./runRouter":50}],45:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -9717,7 +9693,7 @@ function isReactChildren(object) {
 }
 
 module.exports = isReactChildren;
-},{"react":"react"}],47:[function(require,module,exports){
+},{"react":"react"}],46:[function(require,module,exports){
 "use strict";
 
 var LocationActions = require("../actions/LocationActions");
@@ -9836,7 +9812,7 @@ var HashLocation = {
 };
 
 module.exports = HashLocation;
-},{"../History":20,"../actions/LocationActions":33}],48:[function(require,module,exports){
+},{"../History":19,"../actions/LocationActions":32}],47:[function(require,module,exports){
 "use strict";
 
 var LocationActions = require("../actions/LocationActions");
@@ -9929,7 +9905,7 @@ var HistoryLocation = {
 };
 
 module.exports = HistoryLocation;
-},{"../History":20,"../actions/LocationActions":33}],49:[function(require,module,exports){
+},{"../History":19,"../actions/LocationActions":32}],48:[function(require,module,exports){
 "use strict";
 
 var HistoryLocation = require("./HistoryLocation");
@@ -9961,7 +9937,7 @@ var RefreshLocation = {
 };
 
 module.exports = RefreshLocation;
-},{"../History":20,"./HistoryLocation":48}],50:[function(require,module,exports){
+},{"../History":19,"./HistoryLocation":47}],49:[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -10014,7 +9990,7 @@ StaticLocation.prototype.replace = throwCannotModify;
 StaticLocation.prototype.pop = throwCannotModify;
 
 module.exports = StaticLocation;
-},{"react/lib/invariant":63}],51:[function(require,module,exports){
+},{"react/lib/invariant":62}],50:[function(require,module,exports){
 "use strict";
 
 var createRouter = require("./createRouter");
@@ -10065,7 +10041,7 @@ function runRouter(routes, location, callback) {
 }
 
 module.exports = runRouter;
-},{"./createRouter":42}],52:[function(require,module,exports){
+},{"./createRouter":41}],51:[function(require,module,exports){
 "use strict";
 
 function supportsHistory() {
@@ -10082,10 +10058,10 @@ function supportsHistory() {
 }
 
 module.exports = supportsHistory;
-},{}],53:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 module.exports = require('./lib/');
 
-},{"./lib/":54}],54:[function(require,module,exports){
+},{"./lib/":53}],53:[function(require,module,exports){
 // Load modules
 
 var Stringify = require('./stringify');
@@ -10102,7 +10078,7 @@ module.exports = {
     parse: Parse
 };
 
-},{"./parse":55,"./stringify":56}],55:[function(require,module,exports){
+},{"./parse":54,"./stringify":55}],54:[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -10261,7 +10237,7 @@ module.exports = function (str, options) {
     return Utils.compact(obj);
 };
 
-},{"./utils":57}],56:[function(require,module,exports){
+},{"./utils":56}],55:[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -10340,7 +10316,7 @@ module.exports = function (obj, options) {
     return keys.join(delimiter);
 };
 
-},{"./utils":57}],57:[function(require,module,exports){
+},{"./utils":56}],56:[function(require,module,exports){
 // Load modules
 
 
@@ -10474,7 +10450,7 @@ exports.isBuffer = function (obj) {
         obj.constructor.isBuffer(obj));
 };
 
-},{}],58:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 (function (root, React, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD.
@@ -10550,7 +10526,7 @@ exports.isBuffer = function (obj) {
   return TreeView;
 });
 
-},{"react":"react"}],59:[function(require,module,exports){
+},{"react":"react"}],58:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -10595,7 +10571,7 @@ var ExecutionEnvironment = {
 
 module.exports = ExecutionEnvironment;
 
-},{}],60:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -10642,7 +10618,7 @@ function assign(target, sources) {
 
 module.exports = assign;
 
-},{}],61:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -10681,7 +10657,7 @@ function cx(classNames) {
 
 module.exports = cx;
 
-},{}],62:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -10715,7 +10691,7 @@ emptyFunction.thatReturnsArgument = function(arg) { return arg; };
 
 module.exports = emptyFunction;
 
-},{}],63:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -10772,7 +10748,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":15}],64:[function(require,module,exports){
+},{"_process":14}],63:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -10817,7 +10793,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":62,"_process":15}],65:[function(require,module,exports){
+},{"./emptyFunction":61,"_process":14}],64:[function(require,module,exports){
 
 var React = require('react');
 //var _ = require('lodash');
@@ -10839,7 +10815,7 @@ module.exports = function(options) {
 
 
 
-},{"./routes.jsx":66,"react":"react","react-router":45}],66:[function(require,module,exports){
+},{"./routes.jsx":65,"react":"react","react-router":44}],65:[function(require,module,exports){
 
 var React = require('react');
 var Router = require('react-router');
@@ -10899,4 +10875,4 @@ module.exports = function(options) {
 
 
 
-},{"react":"react","react-router":45}]},{},[1]);
+},{"react":"react","react-router":44}]},{},[1]);
