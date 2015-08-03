@@ -15,41 +15,60 @@ button {
   right: 0;
   background-color: #fff;
   border-bottom: 1px solid #e5e5e5;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  z-index: 1;
 }
 
 .sg-drawer-toggle {
   float: left;
-}
-
-.sg-close-toggle {
-  display: block;
-  background-color: #222;
-  border: 0;
-  width: 100%;
-  font-weight: bold;
-  padding: 12px 30px;
-  text-align: left;
-}
-
-.sg-drawer-toggle {
   background: none;
   text-transform: uppercase;
   border: 0;
+  padding: 0 12px 0 54px;
+  background-position: 12px;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #777277;
 }
 
 .sg-header-toggles {
   float: right;
   text-align: right;
   width: 400px;
+  padding-right: 12px;
 }
 
 .sg-header-toggles-label {
   display: inline-block;
   margin: 0 30px;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #777277;
 }
 
 .sg-toggles {
   display: inline-block;
+}
+
+.sg-toggle {
+  border: 0;
+  background-color: transparent;
+  height: 30px;
+  width: 30px;
+  text-indent: 40px;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: .8;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+
+  & + & {
+    margin-left: 20px;
+  }
 }
 
 .sg-drawer {
@@ -62,6 +81,35 @@ button {
   top: 0;
   bottom: 0;
   left: 0;
+  z-index: 1;
+}
+
+.sg-drawer-content {
+  padding: 12px;
+
+  a {
+    color: c3c1c3;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+}
+
+.sg-close-toggle {
+  display: block;
+  background-color: #222;
+  border: 0;
+  width: 100%;
+  font-weight: bold;
+  padding: 12px 30px 12px 54px;
+  text-align: left;
+  text-transform: uppercase;
+  color: #c3c1c3;
+  background-position: 12px center;
 }
 
 .sg-tree {
@@ -89,6 +137,8 @@ button {
 
 .sg-pattern-header {
   border-bottom: 1px solid #e5e5e5;
+  position: relative;
+  margin-bottom: 24px;
 
   &:after {
     content: "";
@@ -106,7 +156,9 @@ button {
 }
 
 .sg-pattern-toggles {
-  float: right;
+  position: absolute;
+  right: 0;
+  bottom: 12px;
 }
 
 .sg-pattern-info {
@@ -115,6 +167,7 @@ button {
 
 .sg-pattern-frame {
   border: 1px solid #e5e5e5;
+  width: 100%;
 }
 
 // TreeView

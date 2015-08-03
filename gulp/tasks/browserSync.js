@@ -1,6 +1,7 @@
 var browserSync = require('browser-sync');
 
 gulp.task('browserSync', ['build'], function () {
+  console.log('syncing');
   browserSync({
     server: {
       baseDir: ['debug'],

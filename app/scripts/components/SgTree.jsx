@@ -30,7 +30,7 @@ var SgTree = React.createClass({
     var collapsedBookkeeping = this.state.collapsedBookkeeping;
 
     return (
-      <div>
+      <div className="sg-drawer-content">
         {this.props.tree.map(function(node, i) {
           var name = node.name;
           var label = <span className="node">{name}</span>;

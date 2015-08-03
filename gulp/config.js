@@ -7,6 +7,11 @@ var sass = {
   dest: DEBUG_DESTINATION + '/css'
 };
 
+var svg = {
+  sources: 'app/img/',
+  dest: './app/img/svg'
+};
+
 var react = {
   sources: 'app/scripts/**/*.js*',
   dest: 'compiled'
@@ -53,5 +58,6 @@ module.exports = {
   react: react,
   extra: extra,
   dist: dist,
+  svg: svg,
   browserify: browserify
 }

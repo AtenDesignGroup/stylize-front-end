@@ -47,6 +47,7 @@ module.exports = {
     routes: routes,
     stylesheets: [ '/css/main.css' ],
     javascripts: [
+     '/img/svg/grunticon.loader.js',
      '/scripts/vendor.js',
      '/scripts/main.js',
      ],

@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 var React = require('react');
+var IconButton = require('./IconButton');
 
 var SgPattern = React.createClass({
   displayName: 'sgpattern',
@@ -32,9 +33,9 @@ var SgPattern = React.createClass({
         <header className="sg-pattern-header">
           <h3 className="sg-pattern-title">{this.props.name}</h3>
           <div className="sg-pattern-toggles">
-            <button className="sg-toggle sg-toggle-filter" onClick={this.onFilterToggleClick} >Filter</button>
-            <button className="sg-toggle sg-toggle-info" onClick={this.onInfoToggleClick} aria-expanded={this.state.infoExpanded} aria-controls={infoID} >Description</button>
-            <button className="sg-toggle sg-toggle-code" onClick={this.onCodeToggleClick} aria-expanded={this.state.codeExpanded} aria-controls={codeID} >Code</button>
+            <IconButton icon="target" className="sg-toggle sg-toggle-filter" onClick={this.onFilterToggleClick} >Filter</IconButton>
+            <IconButton icon="info" className="sg-toggle sg-toggle-info" onClick={this.onInfoToggleClick} aria-expanded={this.state.infoExpanded} aria-controls={infoID} >Description</IconButton>
+            <IconButton icon="code" className="sg-toggle sg-toggle-code" onClick={this.onCodeToggleClick} aria-expanded={this.state.codeExpanded} aria-controls={codeID} >Code</IconButton>
           </div>
         </header>
         <div className="sg-pattern-info" id={infoID} aria-expanded={this.state.infoExpanded} >{this.props.description}</div>
