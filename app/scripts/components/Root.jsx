@@ -8,58 +8,17 @@ var Html = require('react-html');
 var _ = require('lodash')
 
 var Root = React.createClass({
-  getInitialState: function() {
-    return {
-      drawerExpanded: false
-    };
-  },
-
-  unflatten: function( array, parent, tree ){
-    tree = typeof tree !== 'undefined' ? tree : [];
-    parent = typeof parent !== 'undefined' ? parent : {};
-    var that = this;
-
-    var children = _.filter(
-      array,
-      function(child) {
-        return child.parentId == parent.id; }
-    );
-
-    if (!_.isEmpty( children )){
-      if( parent.id == undefined ){
-        tree = children;
-      } else {
-        parent['children'] = children
-      }
-      _.each(
-        children,
-        function(child){ that.unflatten( array, child ); }
-      );
-    }
-    return tree;
-  },
-
-  handleDrawerToggleClick: function(e){
-    this.setState({
-      drawerExpanded: !this.state.drawerExpanded
-    });
-  },
-
   render: function () {
     var initialProps = {
       __html: 'window.INITIAL_PROPS = ' + safeStringify(this.props)
     };
-
-    var categoryTree = this.unflatten(this.props.categories);
 
     return (
       <Html {...this.props}>
         <head>
           <title>{this.props.title}</title>
         </head>
-          <SgHeader onDrawerToggleClick={this.handleDrawerToggleClick} expanded={this.state.drawerExpanded} />
-          <SgDrawer onDrawerToggleClick={this.handleDrawerToggleClick} expanded={this.state.drawerExpanded} tree={categoryTree} />
-          <RouteHandler {...this.props} path={this.state.path}/>
+          <RouteHandler {...this.props} />
           <script
             id='initial-props'
             dangerouslySetInnerHTML={initialProps} />

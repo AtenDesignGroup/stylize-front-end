@@ -1,6 +1,7 @@
 // components/Category.jsx
 var React = require('react');
 var Router = require('react-router');
+var Page = require('./Page');
 var SgPattern = require('./SgPattern');
 var _ = require('lodash');
 
@@ -16,9 +17,8 @@ var Category = React.createClass({
         return _.startsWith(pattern.category, category);
       }
     );
-
     return (
-      <div className="sg-patterns">
+      <Page {...this.props}>
         {patterns.map(function(pattern) {
           return <SgPattern
             key={pattern.id}
@@ -28,7 +28,7 @@ var Category = React.createClass({
             description={pattern.description}
           />;
         })}
-      </div>
+      </Page>
     )
   }
 })

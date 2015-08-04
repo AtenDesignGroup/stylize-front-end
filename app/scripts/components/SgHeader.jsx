@@ -11,8 +11,8 @@ var SgHeader = React.createClass({
         <div className="sg-header-toggles">
           <h4 className="sg-header-toggles-label">Toggle All</h4>
           <div className="sg-toggles">
-            <IconButton icon="info" className="sg-toggle sg-toggle-info">Descriptions</IconButton>
-            <IconButton icon="code" className="sg-toggle sg-toggle-code">Code</IconButton>
+            <IconButton icon="info" className="sg-toggle sg-toggle-info" onClick={this.props.onToggleAllInfoClick}>Descriptions</IconButton>
+            <IconButton icon="code" className="sg-toggle sg-toggle-code" onClick={this.props.onToggleAllCodeClick}>Code</IconButton>
           </div>
         </div>
       </header>

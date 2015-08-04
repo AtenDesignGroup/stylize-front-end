@@ -1,11 +1,12 @@
 // components/Index.jsx
-var React = require('react')
+var React = require('react');
+var Page = require('./Page');
 var SgPattern = require('./SgPattern');
 
 var Index = React.createClass({
   render: function () {
     return (
-      <div className="sg-patterns">
+      <Page {...this.props} className="sg-patterns">
         {this.props.patterns.map(function(pattern) {
           return <SgPattern
             key={pattern.id}
@@ -15,7 +16,7 @@ var Index = React.createClass({
             description={pattern.description}
           />;
         })}
-      </div>
+      </Page>
     )
   }
 })
