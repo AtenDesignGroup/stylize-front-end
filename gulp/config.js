@@ -1,10 +1,10 @@
 // destination for files for testing
-var DEBUG_DESTINATION = "debug";
+var DESTINATION = "debug";
 
 var sass = {
   sources: 'app/sass/**/*.scss',
   main: ['./app/sass/main.scss'],
-  dest: DEBUG_DESTINATION + '/css'
+  dest: DESTINATION + '/css'
 };
 
 var svg = {
@@ -23,16 +23,16 @@ var extra = {
     '!' + react.sources,
     '!' + sass.sources
   ],
-  dest : DEBUG_DESTINATION
+  dest : DESTINATION
 };
 
 var dist = {
-  sources: DEBUG_DESTINATION + '/**/*.html',
+  sources: DESTINATION + '/**/*.html',
   extra: [
-    DEBUG_DESTINATION + '/**/*.*',
-    '!' + DEBUG_DESTINATION + '/**/*.js',
-    '!' + DEBUG_DESTINATION + '/**/*.css',
-    '!' + DEBUG_DESTINATION + '/*.html'
+    DESTINATION + '/**/*.*',
+    '!' + DESTINATION + '/**/*.js',
+    '!' + DESTINATION + '/**/*.css',
+    '!' + DESTINATION + '/*.html'
   ],
   dest: 'dist'
 };
@@ -49,11 +49,11 @@ var browserify = {
       dest: 'main.js'
     }
   ],
-  dest: './' + DEBUG_DESTINATION + '/scripts/'
+  dest: './' + DESTINATION + '/scripts/'
 };
 
 module.exports = {
-  debugDestination: DEBUG_DESTINATION,
+  debugDestination: DESTINATION,
   sass: sass,
   react: react,
   extra: extra,
