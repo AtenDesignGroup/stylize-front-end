@@ -74,22 +74,37 @@ var stylizeFrontEnd = function() {
     return routes;
   }
 
+  function prepareOptions(options) {
+    // Merge options with defaults.
+    var config = _.assign(defaults, options);
+
+    config.props.patterns = config.patterns;
+    config.props.categories = config.categories;
+    config.routes = createRoutes(config.categories, config.patterns);
+    config.props.routes = config.routes;
+
+    return config;
+  }
+
   var pub = {
+    /**
+     * Scaffold out the front-end
+     *
+     * @param destination string
+     *   Absolute path to a local directory.
+     */
+    init: function(destination) {
+      console.log('copy CSS, JS and Images into ', destination);
+    },
+
     build: function(options, callback) {
       console.log('building front-end');
-
-      // Merge options with defaults.
-      var config = _.assign(defaults, options);
-
-      config.props.patterns = config.patterns;
-      config.props.categories = config.categories;
-      config.routes = createRoutes(config.categories, config.patterns);
-      config.props.routes = config.routes;
-
-      staticBuild(config); // Writes static HTML to destination;
+      staticBuild(prepareOptions(options)); // Writes static HTML to destination;
 
       typeof callback === 'function' && callback();
     },
+
+    prepareOptions: prepareOptions,
 
     watch: function(options) {
       console.log('watch front-end');

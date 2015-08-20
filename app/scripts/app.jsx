@@ -4,6 +4,14 @@
 
 var React = require('react');
 var options = require('./data');
+// var options = require('../../index.js').prepareOptions({});
+
 require('static-react-router/app')(options);
 
-grunticon(["/img/svg/icons.data.svg.css", "/img/svg/icons.data.png.css", "/img/svg/icons.fallback.css"], grunticon.svgLoadedCallback);
+grunticon([
+    "/assets/img/svg/icons.data.svg.css",
+    "/assets/img/svg/icons.data.png.css",
+    "/assets/img/svg/icons.fallback.css"
+  ],
+  grunticon.svgLoadedCallback
+);

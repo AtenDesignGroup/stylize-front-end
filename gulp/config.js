@@ -1,15 +1,15 @@
 // destination for files for testing
-var DESTINATION = "debug";
+var DESTINATION = "build";
 
 var sass = {
   sources: 'app/sass/**/*.scss',
   main: ['./app/sass/main.scss'],
-  dest: DESTINATION + '/css'
+  dest: DESTINATION + '/assets/css'
 };
 
 var svg = {
   sources: 'app/img/',
-  dest: './app/img/svg'
+  dest: DESTINATION + '/assets/img/svg'
 };
 
 var react = {
@@ -49,7 +49,7 @@ var browserify = {
       dest: 'main.js'
     }
   ],
-  dest: './' + DESTINATION + '/scripts/'
+  dest: './' + DESTINATION + '/assets/js/'
 };
 
 module.exports = {

@@ -10,23 +10,22 @@ var Category = require('./components/Category');
 
 var baseUrl = '/';
 
-// module.exports = data;
-
 module.exports = {
   baseUrl: baseUrl,
   redirects: [
   ],
-  dest: path.join(__dirname, '../../debug/'),
+  routes: [],
+  dest: path.join(__dirname, '../../build/'),
   props: {
     name: 'test site name make dynamic',
     baseUrl: baseUrl,
     stylesheets: [
-     '/css/main.css'
+     '/assets/css/main.css'
     ],
     javascripts: [
-     '/img/svg/grunticon.loader.js',
-     '/scripts/vendor.js',
-     '/scripts/main.js',
+     '/assets/img/svg/grunticon.loader.js',
+     '/assets/js/vendor.js',
+     '/assets/js/main.js',
     ]
   },
   Root: require('./components/Root'),
