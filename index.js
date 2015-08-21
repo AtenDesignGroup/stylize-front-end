@@ -28,63 +28,9 @@
 var staticBuild = require('static-react-router/build');
 var _ = require('lodash');
 var path = require('path');
-var defaults = require('./app/scripts/data'); // Custom app config
-
-// Route Handlers
-var Index = require('./app/scripts/components/Index');
-var Category = require('./app/scripts/components/Category');
+var stylizeData = require('./lib/stylizeData');
 
 var stylizeFrontEnd = function() {
-  function createRoute(url, name, handler) {
-    return {
-      path: url,
-      name: name,
-      handler: handler,
-    }
-  }
-
-  function createCategoryRoutes(categories) {
-    // Create a route for each category.
-    return categories.map(function(category) {
-      var url = path.join('category', category.id);
-      return createRoute(url, url, Category);
-    });
-  }
-
-  function createPatternRoutes(patterns) {
-    // Create a route for each category.
-    return patterns.map(function(pattern) {
-      var url = path.join('category', pattern.category, pattern.id);
-      return createRoute(url, pattern.name, Category);
-    });
-  }
-
-  function createRoutes(categories, patterns) {
-    var routes = [
-      // Add index route.
-      createRoute('', 'index', Index),
-    ];
-
-    // Add dynamic routes.
-    routes = routes.concat(
-      createCategoryRoutes(categories),
-      createPatternRoutes(patterns)
-    );
-
-    return routes;
-  }
-
-  function prepareOptions(options) {
-    // Merge options with defaults.
-    var config = _.assign(defaults, options);
-
-    config.props.patterns = config.patterns;
-    config.props.categories = config.categories;
-    config.routes = createRoutes(config.categories, config.patterns);
-    config.props.routes = config.routes;
-
-    return config;
-  }
 
   var pub = {
     /**
@@ -99,12 +45,10 @@ var stylizeFrontEnd = function() {
 
     build: function(options, callback) {
       console.log('building front-end');
-      staticBuild(prepareOptions(options)); // Writes static HTML to destination;
+      staticBuild(stylizeData(options)); // Writes static HTML to destination;
 
       typeof callback === 'function' && callback();
     },
-
-    prepareOptions: prepareOptions,
 
     watch: function(options) {
       console.log('watch front-end');
