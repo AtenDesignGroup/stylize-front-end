@@ -24,11 +24,18 @@
     ]
   }
 */
-
+var fs = require('fs');
+var gulp = require('gulp');
+var gulpfile = require('./Gulpfile');
 var staticBuild = require('static-react-router/build');
 var _ = require('lodash');
 var path = require('path');
+var util = require('util');
 var stylizeData = require('./lib/stylizeData');
+var routes = {
+  Index: require('./app/scripts/components/Index'),
+  Category: require('./app/scripts/components/Category')
+}
 
 var stylizeFrontEnd = function() {
 
@@ -45,8 +52,29 @@ var stylizeFrontEnd = function() {
 
     build: function(options, callback) {
       console.log('building front-end');
-      staticBuild(stylizeData(options)); // Writes static HTML to destination;
 
+      var options = stylizeData(options);
+
+      // Write options to disk so they can be bundled into the client-side app
+      // with browserify.
+      fs.writeFileSync(
+        path.join(options.dest, 'compiled/data.js'),
+        'module.exports = ' + util.inspect(options, {depth: null}),
+        'utf-8'
+      );
+
+      if (gulp.tasks.watch) {
+        gulp.start('watch');
+      }
+
+      options.routes = _.map(options.routes, function(route) {
+        // Replace reference with the actual react component.
+        // console.log('route', route);
+        route.handler = routes[route.handler];
+        return route;
+      });
+      options.props.routes = options.routes;
+      staticBuild(options); // Writes static HTML to destination;
       typeof callback === 'function' && callback();
     },
 

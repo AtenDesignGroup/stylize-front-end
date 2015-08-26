@@ -16,5 +16,5 @@ gulp.task('build-static', function (callback) {
 });
 
 gulp.task('build', function (callback) {
-  runSequence(['clean'],['react', 'copyExtra', 'sass', 'svg'],['browserify'],['build-static'], callback);
+  runSequence(['react', 'copyExtra', 'sass', 'svg'],['browserify'], callback);
 });

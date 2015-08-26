@@ -12,6 +12,8 @@ var watchify = require('watchify');
 var bundleLogger = require('../util/bundleLogger');
 var handleErrors = require('../util/handleErrors');
 var config = require('../config');
+var path = require('path');
+var cwd = process.cwd();
 
 gulp.task('browserify', function (cb) {
 
@@ -21,9 +23,10 @@ gulp.task('browserify', function (cb) {
   var bundlers = [];
 
   files.forEach(function (file) {
+
     var options = {
       // Specify the entry point of your app
-      entries: file.src,
+      entries: path.join(cwd, file.src),
       // Add file extentions to make optional in your requires
       extensions: ['.js', '.jsx'],
       cache: {},

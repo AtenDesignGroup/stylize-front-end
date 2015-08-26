@@ -7,7 +7,8 @@ var SgPattern = React.createClass({
 
   render: function () {
     var infoID = "sg-pattern-info-" + this.props.id;
-        codeID = "sg-pattern-code-" + this.props.id;
+    var codeID = "sg-pattern-code-" + this.props.id;
+    var uri = this.props.uri;
 
     return (
       <div className="sg-pattern">
@@ -20,7 +21,7 @@ var SgPattern = React.createClass({
           </div>
         </header>
         <div className="sg-pattern-info" id={infoID} aria-expanded={this.props.infoExpanded} >{this.props.description}</div>
-        <iframe src={this.props.url} frameBorder="0" className="sg-pattern-frame"></iframe>
+        <iframe src={uri} frameBorder="0" className="sg-pattern-frame"></iframe>
         <pre id={codeID} className="sg-pattern-code" aria-expanded={this.props.codeExpanded} >
           <code>{this.props.code}</code>
         </pre>

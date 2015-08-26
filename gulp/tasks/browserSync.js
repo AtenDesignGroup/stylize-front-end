@@ -4,10 +4,10 @@ gulp.task('browserSync', ['build'], function () {
   console.log('syncing');
   browserSync({
     server: {
-      baseDir: ['build'],
+      baseDir: ['public'],
     },
     files :[
-      'build/**'
+      'public/**'
     ],
     watchOptions: {
       debounceDelay: 1000

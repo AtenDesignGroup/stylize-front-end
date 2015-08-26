@@ -1,620 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/** @jsx React.DOM */
-/*jshint indent: 2, node: true, nomen: true, browser: true*/
-/*global React */
-
-var React = require('react');
-var options = require('./data');
-// var options = require('../../index.js').prepareOptions({});
-
-require('static-react-router/app')(options);
-
-grunticon([
-    "/assets/img/svg/icons.data.svg.css",
-    "/assets/img/svg/icons.data.png.css",
-    "/assets/img/svg/icons.fallback.css"
-  ],
-  grunticon.svgLoadedCallback
-);
-
-},{"./data":11,"react":"react","static-react-router/app":65}],2:[function(require,module,exports){
-// components/Category.jsx
-var React = require('react');
-var Router = require('react-router');
-var Page = require('./Page');
-var SgPattern = require('./SgPattern');
-var _ = require('lodash');
-
-var Category = React.createClass({displayName: "Category",
-  mixins: [ Router.State ],
-
-  render: function () {
-    var path = this.getPathname();
-    var category = path.split('/').slice(2).join('/');
-    var patterns = _.filter(
-      this.props.patterns,
-      function(pattern) {
-        return _.startsWith(pattern.category, category);
-      }
-    );
-    return (
-      React.createElement(Page, React.__spread({},  this.props), 
-        patterns.map(function(pattern) {
-          return React.createElement(SgPattern, {
-            key: pattern.id, 
-            id: pattern.id, 
-            name: pattern.name, 
-            code: pattern.code, 
-            description: pattern.description}
-          );
-        })
-      )
-    )
-  }
-})
-
-module.exports = Category
-
-},{"./Page":5,"./SgPattern":9,"lodash":16,"react":"react","react-router":45}],3:[function(require,module,exports){
-/** @jsx React.DOM */
-var React = require('react');
-
-var IconButton = React.createClass({displayName: "IconButton",
-  render: function() {
-    var iconClass = this.props.icon ? 'icon_' + this.props.icon : '';
-    this.props.className = this.props.className ? iconClass + ' ' + this.props.className : iconClass;
-
-    return (
-      React.createElement("button", React.__spread({},  this.props), this.props.children)
-    );
-  }
-});
-
-module.exports = IconButton;
-
-},{"react":"react"}],4:[function(require,module,exports){
-// components/Index.jsx
-var React = require('react');
-var Page = require('./Page');
-var SgPattern = require('./SgPattern');
-
-var Index = React.createClass({displayName: "Index",
-  render: function () {
-    return (
-      React.createElement(Page, React.__spread({},  this.props, {className: "sg-patterns"}), 
-        this.props.patterns.map(function(pattern) {
-          return React.createElement(SgPattern, {
-            key: pattern.id, 
-            id: pattern.id, 
-            name: pattern.name, 
-            code: pattern.code, 
-            description: pattern.description}
-          );
-        })
-      )
-    )
-  }
-})
-
-module.exports = Index
-
-},{"./Page":5,"./SgPattern":9,"react":"react"}],5:[function(require,module,exports){
-// components/Page
-var React = require('react/addons')
-var SgHeader = require('./SgHeader')
-var SgDrawer = require('./SgDrawer')
-var SgPattern = require('./SgPattern')
-var _ = require('lodash')
-
-var Page = React.createClass({displayName: "Page",
-  /**
-   * Set the initial page state.
-   */
-  getInitialState: function() {
-    var toggles = _.map(this.props.patterns, function(pattern){
-      return {
-        id: pattern.id,
-        code: true,
-        info: true
-      }
-    });
-    toggles = _.indexBy(toggles, 'id');
-
-    return {
-      toggles: toggles,
-      drawerExpanded: false,
-      toggleAll: {
-        code: true,
-        info: true
-      },
-    };
-  },
-
-  /**
-   * Converts a flat array into a parent -> child tree
-   */
-  unflatten: function( array, parent, tree ){
-    tree = typeof tree !== 'undefined' ? tree : [];
-    parent = typeof parent !== 'undefined' ? parent : {};
-    var that = this;
-
-    var children = _.filter(
-      array,
-      function(child) {
-        return child.parentId == parent.id; }
-    );
-
-    if (!_.isEmpty( children )){
-      if( parent.id == undefined ){
-        tree = children;
-      } else {
-        parent['children'] = children
-      }
-      _.each(
-        children,
-        function(child){ that.unflatten( array, child ); }
-      );
-    }
-    return tree;
-  },
-
-  /**
-   * Checks a list of toggles to verify that all are set to true.
-   * Returns true if all toggles of the given property are expanded.
-   */
-  validateToggleAll: function(toggles, property) {
-    var offToggles = _.filter(toggles, function(toggle){
-      return !toggle[property];
-    });
-    return offToggles.length <= 0;
-  },
-
-  /**
-   * Toggles the property of the given pattern between true and false.
-   */
-  toggleProperty: function(id, property) {
-    var toggles = this.state.toggles;
-    var toggleAll = this.state.toggleAll;
-
-    toggles[id][property] = !toggles[id][property];
-    toggleAll[property] = this.validateToggleAll(toggles, property);
-
-    this.setState({
-      toggles: toggles,
-      toggleAll: toggleAll
-    });
-  },
-
-  /**
-   * Toggles the property of all patterns between true and false.
-   * If any patterns are collapsed, all are expanded.
-   * If all patterns are expanded, all are collapsed.
-   */
-  toggleAllProperty: function(property) {
-    var toggles = this.state.toggles;
-    var toggleAll = this.state.toggleAll;
-    var value = !toggleAll[property];
-
-    _.forEach(toggles, function(n, id){
-      toggles[id][property] = value;
-    });
-
-    toggleAll[property] = value;
-
-    this.setState({
-      toggles: toggles,
-      toggleAll: toggleAll
-    });
-  },
-
-  /**
-   * Drawer click handler.
-   */
-  handleDrawerToggleClick: function(e){
-    this.setState({
-      drawerExpanded: !this.state.drawerExpanded
-    });
-  },
-
-  /**
-   * Toggle all code click handler.
-   */
-  handleToggleAllCodeClick: function(e) {
-    this.toggleAllProperty('code');
-  },
-
-  /**
-   * Toggle all info click handler.
-   */
-  handleToggleAllInfoClick: function(e) {
-    this.toggleAllProperty('info');
-  },
-
-  /**
-   * Toggle pattern code click handler.
-   */
-  handlePatternCodeClick: function(id) {
-    this.toggleProperty(id, 'code');
-  },
-
-  /**
-   * Toggle pattern info click handler.
-   */
-  handlePatternInfoClick: function(id) {
-    this.toggleProperty(id, 'info');
-  },
-
-  /**
-   * Adds props to child components since we cannot add them directly to
-   * a route handler.
-   */
-  renderChildren: function () {
-    return React.Children.map(this.props.children, function (child) {
-      var id = child.key;
-
-      if (child.type === SgPattern.type) {
-        var childProps = {
-          onPatternCodeClick: this.handlePatternCodeClick,
-          onPatternInfoClick: this.handlePatternInfoClick,
-          infoExpanded: this.state.toggles[id].info,
-          codeExpanded: this.state.toggles[id].code,
-        };
-        return React.addons.cloneWithProps(child, childProps);
-      }
-      return child;
-    }.bind(this))
-  },
-
-  /**
-   * Render Method.
-   */
-  render: function () {
-    var categoryTree = this.unflatten(this.props.categories);
-    return (
-      React.createElement("div", React.__spread({},  this.props, {className: "page"}), 
-        React.createElement(SgHeader, {onDrawerToggleClick: this.handleDrawerToggleClick, expanded: this.state.drawerExpanded, onToggleAllCodeClick: this.handleToggleAllCodeClick, onToggleAllInfoClick: this.handleToggleAllInfoClick}), 
-        React.createElement(SgDrawer, {onDrawerToggleClick: this.handleDrawerToggleClick, expanded: this.state.drawerExpanded, tree: categoryTree}), 
-        React.createElement("div", {className: "sg-patterns"}, 
-          this.renderChildren()
-        )
-      )
-    )
-  }
-})
-
-module.exports = Page;
-
-},{"./SgDrawer":7,"./SgHeader":8,"./SgPattern":9,"lodash":16,"react/addons":"react/addons"}],6:[function(require,module,exports){
-// components/Root
-var React = require('react')
-var Router = require('react-router')
-var RouteHandler = Router.RouteHandler
-var SgHeader = require('./SgHeader')
-var SgDrawer = require('./SgDrawer')
-var Html = require('react-html');
-var _ = require('lodash')
-
-var Root = React.createClass({displayName: "Root",
-  render: function () {
-    var initialProps = {
-      __html: 'window.INITIAL_PROPS = ' + safeStringify(this.props)
-    };
-
-    return (
-      React.createElement(Html, React.__spread({},  this.props), 
-        React.createElement("head", null, 
-          React.createElement("title", null, this.props.title)
-        ), 
-          React.createElement(RouteHandler, React.__spread({},  this.props)), 
-          React.createElement("script", {
-            id: "initial-props", 
-            dangerouslySetInnerHTML: initialProps})
-      )
-    )
-  }
-})
-
-function safeStringify(obj) {
-  return JSON.stringify(obj).replace(/<\/script/g, '<\\/script').replace(/<!--/g, '<\\!--')
-}
-
-module.exports = Root
-
-},{"./SgDrawer":7,"./SgHeader":8,"lodash":16,"react":"react","react-html":17,"react-router":45}],7:[function(require,module,exports){
-/** @jsx React.DOM */
-var React = require('react/addons'),
-    SgTree = require('./SgTree'),
-    IconButton = require('./IconButton'),
-    _ = require('lodash');
-
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
-var SgDrawer = React.createClass({displayName: "SgDrawer",
-  render: function() {
-    return (
-      React.createElement(ReactCSSTransitionGroup, {transitionName: "drawer"}, 
-        React.createElement("div", {id: "sg-drawer", className: "sg-drawer", "aria-expanded": this.props.expanded}, 
-          React.createElement(IconButton, {icon: "close", className: "sg-close-toggle", onClick: this.props.onDrawerToggleClick, "aria-expanded": this.props.expanded, "aria-controls": "sg-drawer"}, "Close"), 
-          React.createElement(SgTree, {className: "sg-menu", tree: this.props.tree})
-        )
-      )
-    );
-  }
-});
-
-module.exports = SgDrawer;
-
-},{"./IconButton":3,"./SgTree":10,"lodash":16,"react/addons":"react/addons"}],8:[function(require,module,exports){
-/** @jsx React.DOM */
-var React = require('react');
-var IconButton = require('./IconButton');
-
-var SgHeader = React.createClass({
-  displayName: 'sgheader',
-  render: function () {
-    return (
-      React.createElement("header", {className: "sg-header"}, 
-        React.createElement(IconButton, {icon: "menu", className: "sg-header-toggle sg-drawer-toggle", onClick: this.props.onDrawerToggleClick, "aria-expanded": this.props.expanded, "aria-controls": "sg-drawer"}, "Table of Contents"), 
-        React.createElement("div", {className: "sg-header-toggles"}, 
-          React.createElement("h4", {className: "sg-header-toggles-label"}, "Toggle All"), 
-          React.createElement("div", {className: "sg-toggles"}, 
-            React.createElement(IconButton, {icon: "info", className: "sg-toggle sg-toggle-info", onClick: this.props.onToggleAllInfoClick}, "Descriptions"), 
-            React.createElement(IconButton, {icon: "code", className: "sg-toggle sg-toggle-code", onClick: this.props.onToggleAllCodeClick}, "Code")
-          )
-        )
-      )
-    );
-  }
-});
-
-module.exports = SgHeader;
-
-},{"./IconButton":3,"react":"react"}],9:[function(require,module,exports){
-/** @jsx React.DOM */
-var React = require('react');
-var IconButton = require('./IconButton');
-
-var SgPattern = React.createClass({
-  displayName: 'sgpattern',
-
-  render: function () {
-    var infoID = "sg-pattern-info-" + this.props.id;
-        codeID = "sg-pattern-code-" + this.props.id;
-
-    return (
-      React.createElement("div", {className: "sg-pattern"}, 
-        React.createElement("header", {className: "sg-pattern-header"}, 
-          React.createElement("h3", {className: "sg-pattern-title"}, this.props.name), 
-          React.createElement("div", {className: "sg-pattern-toggles"}, 
-            React.createElement(IconButton, {icon: "target", className: "sg-toggle sg-toggle-filter", onClick: this.onFilterToggleClick}, "Filter"), 
-            React.createElement(IconButton, {icon: "info", className: "sg-toggle sg-toggle-info", onClick: this.props.onPatternInfoClick.bind(null, this.props.id), "aria-expanded": this.props.infoExpanded, "aria-controls": infoID}, "Description"), 
-            React.createElement(IconButton, {icon: "code", className: "sg-toggle sg-toggle-code", onClick: this.props.onPatternCodeClick.bind(null, this.props.id), "aria-expanded": this.props.codeExpanded, "aria-controls": codeID}, "Code")
-          )
-        ), 
-        React.createElement("div", {className: "sg-pattern-info", id: infoID, "aria-expanded": this.props.infoExpanded}, this.props.description), 
-        React.createElement("iframe", {src: this.props.url, frameBorder: "0", className: "sg-pattern-frame"}), 
-        React.createElement("pre", {id: codeID, className: "sg-pattern-code", "aria-expanded": this.props.codeExpanded}, 
-          React.createElement("code", null, this.props.code)
-        )
-      )
-    );
-  }
-});
-
-module.exports = SgPattern;
-
-},{"./IconButton":3,"react":"react"}],10:[function(require,module,exports){
-/** @jsx React.DOM */
-var React = require('react'),
-    _ = require('lodash'),
-    Router = require('react-router'),
-    Link = Router.Link,
-    TreeView = require('react-treeview');
-
-var SgTree = React.createClass({displayName: "SgTree",
-  getInitialState: function() {
-    var collapsedBookkeeping = this.props.tree.map(function() {
-      return false;
-    });
-    return {
-      collapsedBookkeeping: collapsedBookkeeping
-    };
-  },
-
-  handleClick: function(i) {
-    this.state.collapsedBookkeeping[i] = !this.state.collapsedBookkeeping[i];
-    this.setState({collapsedBookkeeping: this.state.collapsedBookkeeping});
-  },
-
-  collapseAll: function() {
-    this.setState({
-      collapsedBookkeeping: this.state.collapsedBookkeeping.map(function() {return true;})
-    });
-  },
-
-  render: function() {
-    var collapsedBookkeeping = this.state.collapsedBookkeeping;
-
-    return (
-      React.createElement("div", {className: "sg-drawer-content"}, 
-        this.props.tree.map(function(node, i) {
-          var name = node.name;
-          var label = React.createElement("span", {className: "node"}, name);
-          var children = "";
-          var path = "category/" + node.id;
-
-          if (node.children) {
-            children = node.children.map(function(category, j) {
-              var label = React.createElement("span", {className: "node"}, category.name);
-              var subpath = "category/" + category.id;
-              return (
-                React.createElement(TreeView, {nodeLabel: label, key: category.id}, 
-                  React.createElement(Link, {to: subpath}, "Show All")
-                )
-              );
-            });
-          }
-
-          return (
-            React.createElement(TreeView, {key: this.props.id + '|' + i, nodeLabel: label, collapsed: collapsedBookkeeping[i]}, 
-              React.createElement(Link, {to: path}, "Show All"), 
-              children
-            )
-          );
-        }, this)
-      )
-    );
-  }
-});
-
-module.exports = SgTree;
-
-},{"lodash":16,"react":"react","react-router":45,"react-treeview":58}],11:[function(require,module,exports){
-(function (__dirname){
-var path = require('path');
-
-// Project specific data
-var patterns = require('./data/patterns');
-var categories = require('./data/categories');
-
-// Route Handlers
-var Index = require('./components/Index');
-var Category = require('./components/Category');
-
-var baseUrl = '/';
-
-module.exports = {
-  baseUrl: baseUrl,
-  redirects: [
-  ],
-  routes: [],
-  dest: path.join(__dirname, '../../build/'),
-  props: {
-    name: 'test site name make dynamic',
-    baseUrl: baseUrl,
-    stylesheets: [
-     '/assets/css/main.css'
-    ],
-    javascripts: [
-     '/assets/img/svg/grunticon.loader.js',
-     '/assets/js/vendor.js',
-     '/assets/js/main.js',
-    ]
-  },
-  Root: require('./components/Root'),
-  Default: require('./components/Index'),
-};
-
-}).call(this,"/compiled")
-},{"./components/Category":2,"./components/Index":4,"./components/Root":6,"./data/categories":12,"./data/patterns":13,"path":14}],12:[function(require,module,exports){
-module.exports = [
-  {
-    id: "base",
-    name: "Base",
-    weight: 0,
-  },
-  {
-    id: "objects",
-    name: "Objects",
-    weight: 0,
-  },
-  {
-    id: "objects/ui",
-    name: "UI",
-    weight: 0,
-  },
-  {
-    id: "components",
-    name: "Components",
-    weight: 0,
-  },
-  {
-    id: "components/blocks",
-    name: "Blocks",
-    weight: 0,
-    parentId: "components"
-  },
-  {
-    id: "components/collections",
-    name: "Collections",
-    weight: 0,
-    parentId: "components"
-  },
-  {
-    id: "components/teasers",
-    name: "Teasers",
-    weight: 0,
-    parentId: "components"
-  },
-  {
-    id: "templates",
-    name: "Templates",
-    weight: 0,
-  }
-];
-
-},{}],13:[function(require,module,exports){
-module.exports =  [
-  {
-    id: "colors",
-    name: "Colors",
-    category: "base",
-    weight: 0,
-    description: "These are the colors in use.",
-    url: "These are the colors in use."
-  },
-  {
-    id: "buttons",
-    name: "Buttons",
-    category: "objects/ui",
-    weight: 0,
-    description: "Default button style",
-    code: "<button>Button</button>",
-    usedIn: [
-      "river"
-    ]
-  },
-  {
-    id: "profile",
-    name: "Profile",
-    category: "components/teasers",
-    weight: 0,
-    description: "User profile",
-    uri: "teasers/profile.html",
-    usedIn: [
-      "teaser",
-      "expanded-teaser"
-    ],
-  },
-  {
-    id: "teaser",
-    name: "Teaser",
-    category: "components/teasers",
-    weight: 0,
-    uri: "teasers/teaser.html",
-    description: "Generic article teaser",
-    usedIn: [
-      "river",
-    ],
-    uses: [
-      "profile",
-      "dateline",
-    ],
-  },
-  {
-    id: "river",
-    name: "River of News",
-    category: "components/collections",
-    weight: 0,
-    uri: "collections/river.html",
-    description: "Generic list of articles.",
-    uses: [
-      "teaser",
-    ],
-  }
-];
-
-},{}],14:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -842,7 +226,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":15}],15:[function(require,module,exports){
+},{"_process":2}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -902,7 +286,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],16:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -13257,7 +12641,7 @@ process.umask = function() { return 0; };
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],17:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 
 var React = require('react');
 
@@ -13344,7 +12728,7 @@ Html.Head = React.createClass({displayName: "Head",
 module.exports = Html;
 
 
-},{"react":"react"}],18:[function(require,module,exports){
+},{"react":"react"}],5:[function(require,module,exports){
 "use strict";
 
 /**
@@ -13354,7 +12738,7 @@ module.exports = Html;
 function Cancellation() {}
 
 module.exports = Cancellation;
-},{}],19:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 var warning = require("react/lib/warning");
@@ -13387,7 +12771,7 @@ var Configuration = {
 };
 
 module.exports = Configuration;
-},{"react/lib/invariant":63,"react/lib/warning":64}],20:[function(require,module,exports){
+},{"react/lib/invariant":50,"react/lib/warning":51}],7:[function(require,module,exports){
 "use strict";
 
 var invariant = require("react/lib/invariant");
@@ -13418,7 +12802,7 @@ var History = {
 };
 
 module.exports = History;
-},{"react/lib/ExecutionEnvironment":59,"react/lib/invariant":63}],21:[function(require,module,exports){
+},{"react/lib/ExecutionEnvironment":46,"react/lib/invariant":50}],8:[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -13498,7 +12882,7 @@ var Match = (function () {
 })();
 
 module.exports = Match;
-},{"./PathUtils":24}],22:[function(require,module,exports){
+},{"./PathUtils":11}],9:[function(require,module,exports){
 "use strict";
 
 var PropTypes = require("./PropTypes");
@@ -13573,7 +12957,7 @@ var Navigation = {
 };
 
 module.exports = Navigation;
-},{"./PropTypes":25}],23:[function(require,module,exports){
+},{"./PropTypes":12}],10:[function(require,module,exports){
 "use strict";
 
 var PropTypes = require("./PropTypes");
@@ -13604,7 +12988,7 @@ var NavigationContext = {
 };
 
 module.exports = NavigationContext;
-},{"./PropTypes":25}],24:[function(require,module,exports){
+},{"./PropTypes":12}],11:[function(require,module,exports){
 "use strict";
 
 var invariant = require("react/lib/invariant");
@@ -13758,7 +13142,7 @@ var PathUtils = {
 };
 
 module.exports = PathUtils;
-},{"qs":53,"qs/lib/utils":57,"react/lib/invariant":63}],25:[function(require,module,exports){
+},{"qs":40,"qs/lib/utils":44,"react/lib/invariant":50}],12:[function(require,module,exports){
 "use strict";
 
 var assign = require("react/lib/Object.assign");
@@ -13778,7 +13162,7 @@ var PropTypes = assign({
 }, ReactPropTypes);
 
 module.exports = PropTypes;
-},{"react":"react","react/lib/Object.assign":60}],26:[function(require,module,exports){
+},{"react":"react","react/lib/Object.assign":47}],13:[function(require,module,exports){
 "use strict";
 
 /**
@@ -13791,7 +13175,7 @@ function Redirect(to, params, query) {
 }
 
 module.exports = Redirect;
-},{}],27:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -14011,7 +13395,7 @@ var Route = (function () {
 })();
 
 module.exports = Route;
-},{"./PathUtils":24,"react/lib/Object.assign":60,"react/lib/invariant":63,"react/lib/warning":64}],28:[function(require,module,exports){
+},{"./PathUtils":11,"react/lib/Object.assign":47,"react/lib/invariant":50,"react/lib/warning":51}],15:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -14066,7 +13450,7 @@ var RouteHandlerMixin = {
 };
 
 module.exports = RouteHandlerMixin;
-},{"./PropTypes":25,"react":"react","react/lib/Object.assign":60}],29:[function(require,module,exports){
+},{"./PropTypes":12,"react":"react","react/lib/Object.assign":47}],16:[function(require,module,exports){
 "use strict";
 
 var invariant = require("react/lib/invariant");
@@ -14142,7 +13526,7 @@ var ScrollHistory = {
 };
 
 module.exports = ScrollHistory;
-},{"./getWindowScrollPosition":44,"react/lib/ExecutionEnvironment":59,"react/lib/invariant":63}],30:[function(require,module,exports){
+},{"./getWindowScrollPosition":31,"react/lib/ExecutionEnvironment":46,"react/lib/invariant":50}],17:[function(require,module,exports){
 "use strict";
 
 var PropTypes = require("./PropTypes");
@@ -14222,7 +13606,7 @@ var State = {
 };
 
 module.exports = State;
-},{"./PropTypes":25}],31:[function(require,module,exports){
+},{"./PropTypes":12}],18:[function(require,module,exports){
 "use strict";
 
 var assign = require("react/lib/Object.assign");
@@ -14319,7 +13703,7 @@ var StateContext = {
 };
 
 module.exports = StateContext;
-},{"./PathUtils":24,"./PropTypes":25,"react/lib/Object.assign":60}],32:[function(require,module,exports){
+},{"./PathUtils":11,"./PropTypes":12,"react/lib/Object.assign":47}],19:[function(require,module,exports){
 "use strict";
 
 /* jshint -W058 */
@@ -14395,7 +13779,7 @@ Transition.to = function (transition, routes, params, query, callback) {
 };
 
 module.exports = Transition;
-},{"./Cancellation":18,"./Redirect":26}],33:[function(require,module,exports){
+},{"./Cancellation":5,"./Redirect":13}],20:[function(require,module,exports){
 "use strict";
 
 /**
@@ -14421,7 +13805,7 @@ var LocationActions = {
 };
 
 module.exports = LocationActions;
-},{}],34:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 var LocationActions = require("../actions/LocationActions");
@@ -14451,7 +13835,7 @@ var ImitateBrowserBehavior = {
 };
 
 module.exports = ImitateBrowserBehavior;
-},{"../actions/LocationActions":33}],35:[function(require,module,exports){
+},{"../actions/LocationActions":20}],22:[function(require,module,exports){
 "use strict";
 
 /**
@@ -14467,7 +13851,7 @@ var ScrollToTopBehavior = {
 };
 
 module.exports = ScrollToTopBehavior;
-},{}],36:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -14496,7 +13880,7 @@ var DefaultRoute = React.createClass({
 });
 
 module.exports = DefaultRoute;
-},{"../Configuration":19,"../PropTypes":25,"react":"react"}],37:[function(require,module,exports){
+},{"../Configuration":6,"../PropTypes":12,"react":"react"}],24:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -14609,7 +13993,7 @@ var Link = React.createClass({
 });
 
 module.exports = Link;
-},{"../Navigation":22,"../PropTypes":25,"../Route":27,"../State":30,"react":"react","react/lib/Object.assign":60,"react/lib/cx":61}],38:[function(require,module,exports){
+},{"../Navigation":9,"../PropTypes":12,"../Route":14,"../State":17,"react":"react","react/lib/Object.assign":47,"react/lib/cx":48}],25:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -14639,7 +14023,7 @@ var NotFoundRoute = React.createClass({
 });
 
 module.exports = NotFoundRoute;
-},{"../Configuration":19,"../PropTypes":25,"react":"react"}],39:[function(require,module,exports){
+},{"../Configuration":6,"../PropTypes":12,"react":"react"}],26:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -14666,7 +14050,7 @@ var Redirect = React.createClass({
 });
 
 module.exports = Redirect;
-},{"../Configuration":19,"../PropTypes":25,"react":"react"}],40:[function(require,module,exports){
+},{"../Configuration":6,"../PropTypes":12,"react":"react"}],27:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -14735,7 +14119,7 @@ var Route = React.createClass({
 });
 
 module.exports = Route;
-},{"../Configuration":19,"../PropTypes":25,"./RouteHandler":41,"react":"react"}],41:[function(require,module,exports){
+},{"../Configuration":6,"../PropTypes":12,"./RouteHandler":28,"react":"react"}],28:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -14758,7 +14142,7 @@ var RouteHandler = React.createClass({
 });
 
 module.exports = RouteHandler;
-},{"../RouteHandlerMixin":28,"react":"react"}],42:[function(require,module,exports){
+},{"../RouteHandlerMixin":15,"react":"react"}],29:[function(require,module,exports){
 (function (process){
 "use strict";
 
@@ -15217,7 +14601,7 @@ function createRouter(options) {
 
 module.exports = createRouter;
 }).call(this,require('_process'))
-},{"./Cancellation":18,"./History":20,"./Match":21,"./NavigationContext":23,"./PathUtils":24,"./PropTypes":25,"./Redirect":26,"./Route":27,"./ScrollHistory":29,"./StateContext":31,"./Transition":32,"./actions/LocationActions":33,"./behaviors/ImitateBrowserBehavior":34,"./createRoutesFromReactChildren":43,"./isReactChildren":46,"./locations/HashLocation":47,"./locations/HistoryLocation":48,"./locations/RefreshLocation":49,"./locations/StaticLocation":50,"./supportsHistory":52,"_process":15,"react":"react","react/lib/ExecutionEnvironment":59,"react/lib/invariant":63,"react/lib/warning":64}],43:[function(require,module,exports){
+},{"./Cancellation":5,"./History":7,"./Match":8,"./NavigationContext":10,"./PathUtils":11,"./PropTypes":12,"./Redirect":13,"./Route":14,"./ScrollHistory":16,"./StateContext":18,"./Transition":19,"./actions/LocationActions":20,"./behaviors/ImitateBrowserBehavior":21,"./createRoutesFromReactChildren":30,"./isReactChildren":33,"./locations/HashLocation":34,"./locations/HistoryLocation":35,"./locations/RefreshLocation":36,"./locations/StaticLocation":37,"./supportsHistory":39,"_process":2,"react":"react","react/lib/ExecutionEnvironment":46,"react/lib/invariant":50,"react/lib/warning":51}],30:[function(require,module,exports){
 "use strict";
 
 /* jshint -W084 */
@@ -15300,7 +14684,7 @@ function createRoutesFromReactChildren(children) {
 }
 
 module.exports = createRoutesFromReactChildren;
-},{"./Route":27,"./components/DefaultRoute":36,"./components/NotFoundRoute":38,"./components/Redirect":39,"react":"react","react/lib/Object.assign":60,"react/lib/warning":64}],44:[function(require,module,exports){
+},{"./Route":14,"./components/DefaultRoute":23,"./components/NotFoundRoute":25,"./components/Redirect":26,"react":"react","react/lib/Object.assign":47,"react/lib/warning":51}],31:[function(require,module,exports){
 "use strict";
 
 var invariant = require("react/lib/invariant");
@@ -15319,7 +14703,7 @@ function getWindowScrollPosition() {
 }
 
 module.exports = getWindowScrollPosition;
-},{"react/lib/ExecutionEnvironment":59,"react/lib/invariant":63}],45:[function(require,module,exports){
+},{"react/lib/ExecutionEnvironment":46,"react/lib/invariant":50}],32:[function(require,module,exports){
 "use strict";
 
 exports.DefaultRoute = require("./components/DefaultRoute");
@@ -15349,7 +14733,7 @@ exports.createRedirect = require("./Route").createRedirect;
 exports.createRoutesFromReactChildren = require("./createRoutesFromReactChildren");
 exports.create = require("./createRouter");
 exports.run = require("./runRouter");
-},{"./History":20,"./Navigation":22,"./Route":27,"./RouteHandlerMixin":28,"./State":30,"./behaviors/ImitateBrowserBehavior":34,"./behaviors/ScrollToTopBehavior":35,"./components/DefaultRoute":36,"./components/Link":37,"./components/NotFoundRoute":38,"./components/Redirect":39,"./components/Route":40,"./components/RouteHandler":41,"./createRouter":42,"./createRoutesFromReactChildren":43,"./locations/HashLocation":47,"./locations/HistoryLocation":48,"./locations/RefreshLocation":49,"./locations/StaticLocation":50,"./runRouter":51}],46:[function(require,module,exports){
+},{"./History":7,"./Navigation":9,"./Route":14,"./RouteHandlerMixin":15,"./State":17,"./behaviors/ImitateBrowserBehavior":21,"./behaviors/ScrollToTopBehavior":22,"./components/DefaultRoute":23,"./components/Link":24,"./components/NotFoundRoute":25,"./components/Redirect":26,"./components/Route":27,"./components/RouteHandler":28,"./createRouter":29,"./createRoutesFromReactChildren":30,"./locations/HashLocation":34,"./locations/HistoryLocation":35,"./locations/RefreshLocation":36,"./locations/StaticLocation":37,"./runRouter":38}],33:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -15363,7 +14747,7 @@ function isReactChildren(object) {
 }
 
 module.exports = isReactChildren;
-},{"react":"react"}],47:[function(require,module,exports){
+},{"react":"react"}],34:[function(require,module,exports){
 "use strict";
 
 var LocationActions = require("../actions/LocationActions");
@@ -15482,7 +14866,7 @@ var HashLocation = {
 };
 
 module.exports = HashLocation;
-},{"../History":20,"../actions/LocationActions":33}],48:[function(require,module,exports){
+},{"../History":7,"../actions/LocationActions":20}],35:[function(require,module,exports){
 "use strict";
 
 var LocationActions = require("../actions/LocationActions");
@@ -15575,7 +14959,7 @@ var HistoryLocation = {
 };
 
 module.exports = HistoryLocation;
-},{"../History":20,"../actions/LocationActions":33}],49:[function(require,module,exports){
+},{"../History":7,"../actions/LocationActions":20}],36:[function(require,module,exports){
 "use strict";
 
 var HistoryLocation = require("./HistoryLocation");
@@ -15607,7 +14991,7 @@ var RefreshLocation = {
 };
 
 module.exports = RefreshLocation;
-},{"../History":20,"./HistoryLocation":48}],50:[function(require,module,exports){
+},{"../History":7,"./HistoryLocation":35}],37:[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -15660,7 +15044,7 @@ StaticLocation.prototype.replace = throwCannotModify;
 StaticLocation.prototype.pop = throwCannotModify;
 
 module.exports = StaticLocation;
-},{"react/lib/invariant":63}],51:[function(require,module,exports){
+},{"react/lib/invariant":50}],38:[function(require,module,exports){
 "use strict";
 
 var createRouter = require("./createRouter");
@@ -15711,7 +15095,7 @@ function runRouter(routes, location, callback) {
 }
 
 module.exports = runRouter;
-},{"./createRouter":42}],52:[function(require,module,exports){
+},{"./createRouter":29}],39:[function(require,module,exports){
 "use strict";
 
 function supportsHistory() {
@@ -15728,10 +15112,10 @@ function supportsHistory() {
 }
 
 module.exports = supportsHistory;
-},{}],53:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 module.exports = require('./lib/');
 
-},{"./lib/":54}],54:[function(require,module,exports){
+},{"./lib/":41}],41:[function(require,module,exports){
 // Load modules
 
 var Stringify = require('./stringify');
@@ -15748,7 +15132,7 @@ module.exports = {
     parse: Parse
 };
 
-},{"./parse":55,"./stringify":56}],55:[function(require,module,exports){
+},{"./parse":42,"./stringify":43}],42:[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -15907,7 +15291,7 @@ module.exports = function (str, options) {
     return Utils.compact(obj);
 };
 
-},{"./utils":57}],56:[function(require,module,exports){
+},{"./utils":44}],43:[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -15986,7 +15370,7 @@ module.exports = function (obj, options) {
     return keys.join(delimiter);
 };
 
-},{"./utils":57}],57:[function(require,module,exports){
+},{"./utils":44}],44:[function(require,module,exports){
 // Load modules
 
 
@@ -16120,7 +15504,7 @@ exports.isBuffer = function (obj) {
         obj.constructor.isBuffer(obj));
 };
 
-},{}],58:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 (function (root, React, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD.
@@ -16196,7 +15580,7 @@ exports.isBuffer = function (obj) {
   return TreeView;
 });
 
-},{"react":"react"}],59:[function(require,module,exports){
+},{"react":"react"}],46:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -16241,7 +15625,7 @@ var ExecutionEnvironment = {
 
 module.exports = ExecutionEnvironment;
 
-},{}],60:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -16288,7 +15672,7 @@ function assign(target, sources) {
 
 module.exports = assign;
 
-},{}],61:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -16327,7 +15711,7 @@ function cx(classNames) {
 
 module.exports = cx;
 
-},{}],62:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -16361,7 +15745,7 @@ emptyFunction.thatReturnsArgument = function(arg) { return arg; };
 
 module.exports = emptyFunction;
 
-},{}],63:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -16418,7 +15802,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":15}],64:[function(require,module,exports){
+},{"_process":2}],51:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -16463,7 +15847,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":62,"_process":15}],65:[function(require,module,exports){
+},{"./emptyFunction":49,"_process":2}],52:[function(require,module,exports){
 
 var React = require('react');
 //var _ = require('lodash');
@@ -16485,7 +15869,7 @@ module.exports = function(options) {
 
 
 
-},{"./routes.jsx":66,"react":"react","react-router":45}],66:[function(require,module,exports){
+},{"./routes.jsx":53,"react":"react","react-router":32}],53:[function(require,module,exports){
 
 var React = require('react');
 var Router = require('react-router');
@@ -16545,4 +15929,477 @@ module.exports = function(options) {
 
 
 
-},{"react":"react","react-router":45}]},{},[1]);
+},{"react":"react","react-router":32}],54:[function(require,module,exports){
+/** @jsx React.DOM */
+/*jshint indent: 2, node: true, nomen: true, browser: true*/
+/*global React */
+
+var React = require('react');
+var options = require('./data');
+// var options = require('../../index.js').prepareOptions({});
+
+require('static-react-router/app')(options);
+
+grunticon([
+    "/assets/img/svg/icons.data.svg.css",
+    "/assets/img/svg/icons.data.png.css",
+    "/assets/img/svg/icons.fallback.css"
+  ],
+  grunticon.svgLoadedCallback
+);
+
+},{"./data":63,"react":"react","static-react-router/app":52}],55:[function(require,module,exports){
+/** @jsx React.DOM */
+var React = require('react');
+
+var IconButton = React.createClass({displayName: "IconButton",
+  render: function() {
+    var iconClass = this.props.icon ? 'icon_' + this.props.icon : '';
+    this.props.className = this.props.className ? iconClass + ' ' + this.props.className : iconClass;
+
+    return (
+      React.createElement("button", React.__spread({},  this.props), this.props.children)
+    );
+  }
+});
+
+module.exports = IconButton;
+
+},{"react":"react"}],56:[function(require,module,exports){
+// components/Index.jsx
+var React = require('react');
+var Page = require('./Page');
+var SgPattern = require('./SgPattern');
+
+var Index = React.createClass({displayName: "Index",
+  render: function () {
+    return (
+      React.createElement(Page, React.__spread({},  this.props, {className: "sg-patterns"}), 
+        this.props.patterns.map(function(pattern) {
+          return React.createElement(SgPattern, {
+            key: pattern.id, 
+            id: pattern.id, 
+            name: pattern.name, 
+            code: pattern.code, 
+            description: pattern.description}
+          );
+        })
+      )
+    )
+  }
+})
+
+module.exports = Index
+
+},{"./Page":57,"./SgPattern":61,"react":"react"}],57:[function(require,module,exports){
+// components/Page
+var React = require('react/addons')
+var SgHeader = require('./SgHeader')
+var SgDrawer = require('./SgDrawer')
+var SgPattern = require('./SgPattern')
+var _ = require('lodash')
+
+var Page = React.createClass({displayName: "Page",
+  /**
+   * Set the initial page state.
+   */
+  getInitialState: function() {
+    var toggles = _.map(this.props.patterns, function(pattern){
+      return {
+        id: pattern.id,
+        code: true,
+        info: true
+      }
+    });
+    toggles = _.indexBy(toggles, 'id');
+
+    return {
+      toggles: toggles,
+      drawerExpanded: false,
+      toggleAll: {
+        code: true,
+        info: true
+      },
+    };
+  },
+
+  /**
+   * Converts a flat array into a parent -> child tree
+   */
+  unflatten: function( array, parent, tree ){
+    tree = typeof tree !== 'undefined' ? tree : [];
+    parent = typeof parent !== 'undefined' ? parent : {};
+    var that = this;
+
+    var children = _.filter(
+      array,
+      function(child) {
+        return child.parentId == parent.id; }
+    );
+
+    if (!_.isEmpty( children )){
+      if( parent.id == undefined ){
+        tree = children;
+      } else {
+        parent['children'] = children
+      }
+      _.each(
+        children,
+        function(child){ that.unflatten( array, child ); }
+      );
+    }
+    return tree;
+  },
+
+  /**
+   * Checks a list of toggles to verify that all are set to true.
+   * Returns true if all toggles of the given property are expanded.
+   */
+  validateToggleAll: function(toggles, property) {
+    var offToggles = _.filter(toggles, function(toggle){
+      return !toggle[property];
+    });
+    return offToggles.length <= 0;
+  },
+
+  /**
+   * Toggles the property of the given pattern between true and false.
+   */
+  toggleProperty: function(id, property) {
+    var toggles = this.state.toggles;
+    var toggleAll = this.state.toggleAll;
+
+    toggles[id][property] = !toggles[id][property];
+    toggleAll[property] = this.validateToggleAll(toggles, property);
+
+    this.setState({
+      toggles: toggles,
+      toggleAll: toggleAll
+    });
+  },
+
+  /**
+   * Toggles the property of all patterns between true and false.
+   * If any patterns are collapsed, all are expanded.
+   * If all patterns are expanded, all are collapsed.
+   */
+  toggleAllProperty: function(property) {
+    var toggles = this.state.toggles;
+    var toggleAll = this.state.toggleAll;
+    var value = !toggleAll[property];
+
+    _.forEach(toggles, function(n, id){
+      toggles[id][property] = value;
+    });
+
+    toggleAll[property] = value;
+
+    this.setState({
+      toggles: toggles,
+      toggleAll: toggleAll
+    });
+  },
+
+  /**
+   * Drawer click handler.
+   */
+  handleDrawerToggleClick: function(e){
+    this.setState({
+      drawerExpanded: !this.state.drawerExpanded
+    });
+  },
+
+  /**
+   * Toggle all code click handler.
+   */
+  handleToggleAllCodeClick: function(e) {
+    this.toggleAllProperty('code');
+  },
+
+  /**
+   * Toggle all info click handler.
+   */
+  handleToggleAllInfoClick: function(e) {
+    this.toggleAllProperty('info');
+  },
+
+  /**
+   * Toggle pattern code click handler.
+   */
+  handlePatternCodeClick: function(id) {
+    this.toggleProperty(id, 'code');
+  },
+
+  /**
+   * Toggle pattern info click handler.
+   */
+  handlePatternInfoClick: function(id) {
+    this.toggleProperty(id, 'info');
+  },
+
+  /**
+   * Adds props to child components since we cannot add them directly to
+   * a route handler.
+   */
+  renderChildren: function () {
+    return React.Children.map(this.props.children, function (child) {
+      var id = child.key;
+
+      if (child.type === SgPattern.type) {
+        var childProps = {
+          onPatternCodeClick: this.handlePatternCodeClick,
+          onPatternInfoClick: this.handlePatternInfoClick,
+          infoExpanded: this.state.toggles[id].info,
+          codeExpanded: this.state.toggles[id].code,
+        };
+        return React.addons.cloneWithProps(child, childProps);
+      }
+      return child;
+    }.bind(this))
+  },
+
+  /**
+   * Render Method.
+   */
+  render: function () {
+    var categoryTree = this.unflatten(this.props.categories);
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: "page"}), 
+        React.createElement(SgHeader, {onDrawerToggleClick: this.handleDrawerToggleClick, expanded: this.state.drawerExpanded, onToggleAllCodeClick: this.handleToggleAllCodeClick, onToggleAllInfoClick: this.handleToggleAllInfoClick}), 
+        React.createElement(SgDrawer, {onDrawerToggleClick: this.handleDrawerToggleClick, expanded: this.state.drawerExpanded, tree: categoryTree}), 
+        React.createElement("div", {className: "sg-patterns"}, 
+          this.renderChildren()
+        )
+      )
+    )
+  }
+})
+
+module.exports = Page;
+
+},{"./SgDrawer":59,"./SgHeader":60,"./SgPattern":61,"lodash":3,"react/addons":"react/addons"}],58:[function(require,module,exports){
+// components/Root
+var React = require('react')
+var Router = require('react-router')
+var RouteHandler = Router.RouteHandler
+var SgHeader = require('./SgHeader')
+var SgDrawer = require('./SgDrawer')
+var Html = require('react-html');
+var _ = require('lodash')
+
+var Root = React.createClass({displayName: "Root",
+  render: function () {
+    var initialProps = {
+      __html: 'window.INITIAL_PROPS = ' + safeStringify(this.props)
+    };
+
+    return (
+      React.createElement(Html, React.__spread({},  this.props), 
+        React.createElement("head", null, 
+          React.createElement("title", null, this.props.title)
+        ), 
+          React.createElement(RouteHandler, React.__spread({},  this.props)), 
+          React.createElement("script", {
+            id: "initial-props", 
+            dangerouslySetInnerHTML: initialProps})
+      )
+    )
+  }
+})
+
+function safeStringify(obj) {
+  return JSON.stringify(obj).replace(/<\/script/g, '<\\/script').replace(/<!--/g, '<\\!--')
+}
+
+module.exports = Root
+
+},{"./SgDrawer":59,"./SgHeader":60,"lodash":3,"react":"react","react-html":4,"react-router":32}],59:[function(require,module,exports){
+/** @jsx React.DOM */
+var React = require('react/addons'),
+    SgTree = require('./SgTree'),
+    IconButton = require('./IconButton'),
+    _ = require('lodash');
+
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+var SgDrawer = React.createClass({displayName: "SgDrawer",
+  render: function() {
+    return (
+      React.createElement(ReactCSSTransitionGroup, {transitionName: "drawer"}, 
+        React.createElement("div", {id: "sg-drawer", className: "sg-drawer", "aria-expanded": this.props.expanded}, 
+          React.createElement(IconButton, {icon: "close", className: "sg-close-toggle", onClick: this.props.onDrawerToggleClick, "aria-expanded": this.props.expanded, "aria-controls": "sg-drawer"}, "Close"), 
+          React.createElement(SgTree, {className: "sg-menu", tree: this.props.tree})
+        )
+      )
+    );
+  }
+});
+
+module.exports = SgDrawer;
+
+},{"./IconButton":55,"./SgTree":62,"lodash":3,"react/addons":"react/addons"}],60:[function(require,module,exports){
+/** @jsx React.DOM */
+var React = require('react');
+var IconButton = require('./IconButton');
+
+var SgHeader = React.createClass({
+  displayName: 'sgheader',
+  render: function () {
+    return (
+      React.createElement("header", {className: "sg-header"}, 
+        React.createElement(IconButton, {icon: "menu", className: "sg-header-toggle sg-drawer-toggle", onClick: this.props.onDrawerToggleClick, "aria-expanded": this.props.expanded, "aria-controls": "sg-drawer"}, "Table of Contents"), 
+        React.createElement("div", {className: "sg-header-toggles"}, 
+          React.createElement("h4", {className: "sg-header-toggles-label"}, "Toggle All"), 
+          React.createElement("div", {className: "sg-toggles"}, 
+            React.createElement(IconButton, {icon: "info", className: "sg-toggle sg-toggle-info", onClick: this.props.onToggleAllInfoClick}, "Descriptions"), 
+            React.createElement(IconButton, {icon: "code", className: "sg-toggle sg-toggle-code", onClick: this.props.onToggleAllCodeClick}, "Code")
+          )
+        )
+      )
+    );
+  }
+});
+
+module.exports = SgHeader;
+
+},{"./IconButton":55,"react":"react"}],61:[function(require,module,exports){
+/** @jsx React.DOM */
+var React = require('react');
+var IconButton = require('./IconButton');
+
+var SgPattern = React.createClass({
+  displayName: 'sgpattern',
+
+  render: function () {
+    var infoID = "sg-pattern-info-" + this.props.id;
+        codeID = "sg-pattern-code-" + this.props.id;
+
+    return (
+      React.createElement("div", {className: "sg-pattern"}, 
+        React.createElement("header", {className: "sg-pattern-header"}, 
+          React.createElement("h3", {className: "sg-pattern-title"}, this.props.name), 
+          React.createElement("div", {className: "sg-pattern-toggles"}, 
+            React.createElement(IconButton, {icon: "target", className: "sg-toggle sg-toggle-filter", onClick: this.onFilterToggleClick}, "Filter"), 
+            React.createElement(IconButton, {icon: "info", className: "sg-toggle sg-toggle-info", onClick: this.props.onPatternInfoClick.bind(null, this.props.id), "aria-expanded": this.props.infoExpanded, "aria-controls": infoID}, "Description"), 
+            React.createElement(IconButton, {icon: "code", className: "sg-toggle sg-toggle-code", onClick: this.props.onPatternCodeClick.bind(null, this.props.id), "aria-expanded": this.props.codeExpanded, "aria-controls": codeID}, "Code")
+          )
+        ), 
+        React.createElement("div", {className: "sg-pattern-info", id: infoID, "aria-expanded": this.props.infoExpanded}, this.props.description), 
+        React.createElement("iframe", {src: this.props.url, frameBorder: "0", className: "sg-pattern-frame"}), 
+        React.createElement("pre", {id: codeID, className: "sg-pattern-code", "aria-expanded": this.props.codeExpanded}, 
+          React.createElement("code", null, this.props.code)
+        )
+      )
+    );
+  }
+});
+
+module.exports = SgPattern;
+
+},{"./IconButton":55,"react":"react"}],62:[function(require,module,exports){
+/** @jsx React.DOM */
+var React = require('react'),
+    _ = require('lodash'),
+    Router = require('react-router'),
+    Link = Router.Link,
+    TreeView = require('react-treeview');
+
+var SgTree = React.createClass({displayName: "SgTree",
+  getInitialState: function() {
+    var collapsedBookkeeping = this.props.tree.map(function() {
+      return false;
+    });
+    return {
+      collapsedBookkeeping: collapsedBookkeeping
+    };
+  },
+
+  handleClick: function(i) {
+    this.state.collapsedBookkeeping[i] = !this.state.collapsedBookkeeping[i];
+    this.setState({collapsedBookkeeping: this.state.collapsedBookkeeping});
+  },
+
+  collapseAll: function() {
+    this.setState({
+      collapsedBookkeeping: this.state.collapsedBookkeeping.map(function() {return true;})
+    });
+  },
+
+  render: function() {
+    var collapsedBookkeeping = this.state.collapsedBookkeeping;
+
+    return (
+      React.createElement("div", {className: "sg-drawer-content"}, 
+        this.props.tree.map(function(node, i) {
+          var name = node.name;
+          var label = React.createElement("span", {className: "node"}, name);
+          var children = "";
+          var path = "category/" + node.id;
+
+          if (node.children) {
+            children = node.children.map(function(category, j) {
+              var label = React.createElement("span", {className: "node"}, category.name);
+              var subpath = "category/" + category.id;
+              return (
+                React.createElement(TreeView, {nodeLabel: label, key: category.id}, 
+                  React.createElement(Link, {to: subpath}, "Show All")
+                )
+              );
+            });
+          }
+
+          return (
+            React.createElement(TreeView, {key: this.props.id + '|' + i, nodeLabel: label, collapsed: collapsedBookkeeping[i]}, 
+              React.createElement(Link, {to: path}, "Show All"), 
+              children
+            )
+          );
+        }, this)
+      )
+    );
+  }
+});
+
+module.exports = SgTree;
+
+},{"lodash":3,"react":"react","react-router":32,"react-treeview":45}],63:[function(require,module,exports){
+(function (__dirname){
+var path = require('path');
+
+var baseUrl = '/';
+
+var defaults = {
+  baseUrl: baseUrl,
+  redirects: [],
+  routes: [],
+  dest: path.join(__dirname, '../../build/'),
+  props: {
+    name: 'Stylize',
+    baseUrl: baseUrl,
+    stylesheets: [
+     '/assets/css/main.css'
+    ],
+    javascripts: [
+     '/assets/img/svg/grunticon.loader.js',
+     '/assets/js/vendor.js',
+     '/assets/js/main.js',
+    ]
+  },
+  Root: require('./components/Root'),
+  Default: require('./components/Index'),
+}
+
+module.exports = function (options) {
+  // Merge options with defaults.
+  var config = _.assign(defaults, options);
+
+  config.props.patterns = config.patterns;
+  config.props.categories = config.categories;
+  config.routes = createRoutes(config.categories, config.patterns);
+  config.props.routes = config.routes;
+
+  return config;
+};
+
+}).call(this,"/public/compiled")
+},{"./components/Index":56,"./components/Root":58,"path":1}]},{},[54]);

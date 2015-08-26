@@ -1,25 +1,36 @@
 // destination for files for testing
-var DESTINATION = "build";
+var DESTINATION = "public";
+var path = require('path');
+
+/**
+ * Return absolute path
+ * project root.
+ */
+var absolutePath = function(relativePath) {
+  return path.join(__dirname, '../', relativePath);
+}
 
 var sass = {
-  sources: 'app/sass/**/*.scss',
-  main: ['./app/sass/main.scss'],
+  sources: absolutePath('app/sass/**/*.scss'),
+  main: [
+    absolutePath('app/sass/main.scss')
+  ],
   dest: DESTINATION + '/assets/css'
 };
 
 var svg = {
-  sources: 'app/img/',
+  sources: absolutePath('app/img/'),
   dest: DESTINATION + '/assets/img/svg'
 };
 
 var react = {
-  sources: 'app/scripts/**/*.js*',
-  dest: 'compiled'
+  sources: absolutePath('app/scripts/**/*.js*'),
+  dest: DESTINATION + '/compiled'
 };
 
 var extra = {
   sources: [
-    'app/**/*.*',
+    absolutePath('app/**/*.*'),
     '!' + react.sources,
     '!' + sass.sources
   ],
@@ -40,16 +51,16 @@ var dist = {
 var browserify = {
   files: [
     {
-      src: ['./' + react.dest + '/vendor.js'],
+      src: path.join(react.dest, '/vendor.js'),
       dest: 'vendor.js',
       vendor: true
     },
     {
-      src: ['./' + react.dest + '/app.js'],
+      src: path.join(react.dest, '/app.js'),
       dest: 'main.js'
     }
   ],
-  dest: './' + DESTINATION + '/assets/js/'
+  dest: DESTINATION + '/assets/js/'
 };
 
 module.exports = {

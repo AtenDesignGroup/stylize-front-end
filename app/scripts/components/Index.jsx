@@ -14,6 +14,7 @@ var Index = React.createClass({
             name={pattern.name}
             code={pattern.code}
             description={pattern.description}
+            uri={pattern.uri}
           />;
         })}
       </Page>
