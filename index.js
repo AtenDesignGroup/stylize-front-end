@@ -37,7 +37,27 @@ var routes = {
   Category: require('./app/scripts/components/Category')
 }
 
+var projectDependencies = {
+  "stylizer-front-end": "https://github.com/AtenDesignGroup/stylizer-front-end",
+  "es6-promise": "^2.0.1",
+  "lodash": "^3.10.0",
+  "react": "^0.12.2",
+  "react-html": "^2.1.0",
+  "react-router": "^0.12.4",
+  "react-treeview": "^0.3.12",
+  "reactify": "^1.1.1",
+  "static-react-router": "https://github.com/pixelwhip/static-react-router.git"
+}
+
 var stylizeFrontEnd = function() {
+
+  function handleStd(error, stdout, stderr) {
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
+  }
 
   var pub = {
     /**
@@ -47,7 +67,20 @@ var stylizeFrontEnd = function() {
      *   Absolute path to a local directory.
      */
     init: function(destination) {
-      console.log('copy CSS, JS and Images into ', destination);
+      console.log('Installing front-end dependencies... ');
+
+      var pathToPackageJSON = path.join(process.cwd(), 'package.json');
+
+      var packageJSON = fs.readFile(pathToPackageJSON, { encoding: 'utf-8' }, function (err, data) {
+        if (err) handleStd(err);
+        data = JSON.parse(data);
+        data.dependencies = _.assign(data.dependencies, projectDependencies);
+
+        fs.writeFileSync(pathToPackageJSON, JSON.stringify(data, null, "  "), { encoding: 'utf-8' }, function(err, data) {
+          console.log('packageJSON updated.  Time to install!');
+          if (err) { handleStd(err);}
+        });
+      });
     },
 
     build: function(options, callback) {
