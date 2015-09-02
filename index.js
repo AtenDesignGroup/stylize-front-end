@@ -63,10 +63,11 @@ var stylizeFrontEnd = function() {
     /**
      * Scaffold out the front-end
      *
-     * @param destination string
+     * @param {string} destination
      *   Absolute path to a local directory.
+     * @param {function} callback
      */
-    init: function(destination) {
+    init: function(destination, callback) {
       console.log('Installing front-end dependencies... ');
 
       var pathToPackageJSON = path.join(process.cwd(), 'package.json');
@@ -81,6 +82,7 @@ var stylizeFrontEnd = function() {
           if (err) { handleStd(err);}
         });
       });
+      typeof callback === 'function' && callback();
     },
 
     build: function(options, callback) {
