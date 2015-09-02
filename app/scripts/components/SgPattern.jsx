@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 var IconButton = require('./IconButton');
+var path = require('path');
 
 var SgPattern = React.createClass({
   displayName: 'sgpattern',
@@ -9,6 +10,7 @@ var SgPattern = React.createClass({
     var infoID = "sg-pattern-info-" + this.props.id;
     var codeID = "sg-pattern-code-" + this.props.id;
     var uri = this.props.uri;
+    // var uri = path.relative(this.getPathname(), this.props.uri);
 
     return (
       <div className="sg-pattern">
@@ -22,7 +24,7 @@ var SgPattern = React.createClass({
         </header>
         <div className="sg-pattern-info" id={infoID} aria-expanded={this.props.infoExpanded} >{this.props.description}</div>
         <iframe src={uri} frameBorder="0" className="sg-pattern-frame"></iframe>
-        <pre id={codeID} className="sg-pattern-code" aria-expanded={this.props.codeExpanded} >
+        <pre id={codeID} className="sg-pattern-code language-handlebars" aria-expanded={this.props.codeExpanded} >
           <code>{this.props.code}</code>
         </pre>
       </div>

@@ -9,8 +9,8 @@ var Category = React.createClass({
   mixins: [ Router.State ],
 
   render: function () {
-    var path = this.getPathname();
-    var category = path.split('/').slice(2).join('/');
+    var currentPath = this.getPathname();
+    var category = currentPath.split('/').slice(2).join('/');
     var patterns = _.filter(
       this.props.patterns,
       function(pattern) {

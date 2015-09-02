@@ -4,3 +4,4 @@ window.React = require('react/addons');
 exports.react = window.React;
 
 require('es6-promise').polyfill();
+require('./vendor/prism.js');
