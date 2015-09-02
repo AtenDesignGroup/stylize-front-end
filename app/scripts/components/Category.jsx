@@ -10,7 +10,7 @@ var Category = React.createClass({
 
   render: function () {
     var currentPath = this.getPathname();
-    var category = currentPath.split('/').slice(2).join('/');
+    var category = currentPath.split('/').slice(0, -1).join('/');
     var patterns = _.filter(
       this.props.patterns,
       function(pattern) {
