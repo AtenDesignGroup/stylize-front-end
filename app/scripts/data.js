@@ -16,11 +16,9 @@ var defaults = {
     javascripts: [
      '/assets/img/svg/grunticon.loader.js',
      '/assets/js/vendor.js',
-     '/assets/js/main.js',
+     '/assets/js/main.js'
     ]
-  },
-  Root: require('./components/Root'),
-  Default: require('./components/Index'),
+  }
 }
 
 module.exports = function (options) {
@@ -31,6 +29,5 @@ module.exports = function (options) {
   config.props.categories = config.categories;
   config.routes = createRoutes(config.categories, config.patterns);
   config.props.routes = config.routes;
-
   return config;
 };

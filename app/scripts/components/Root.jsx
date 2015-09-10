@@ -11,17 +11,17 @@ var path = require('path');
 var Root = React.createClass({
   mixins: [ Router.State ],
 
-  componentWillMount: function () {
-    var currentPath = this.getPathname();
+  // componentWillMount: function () {
+  //   var currentPath = this.getPathname();
 
-    this.props.javascripts = _.map(this.props.javascripts, function(script) {
-      return path.relative(currentPath, script);
-    });
+  //   this.props.javascripts = _.map(this.props.javascripts, function(script) {
+  //     return path.relative(currentPath, script);
+  //   });
 
-    this.props.stylesheets = _.map(this.props.stylesheets, function(sheet) {
-      return path.relative(currentPath, sheet);
-    });
-  },
+  //   this.props.stylesheets = _.map(this.props.stylesheets, function(sheet) {
+  //     return path.relative(currentPath, sheet);
+  //   });
+  // },
 
   render: function () {
     var initialProps = {

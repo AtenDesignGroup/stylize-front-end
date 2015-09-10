@@ -17,8 +17,9 @@
     "url": "https://github.com/pixelwhip"
   },
   "dependencies": {
+    "chalk": "^1.1.0",
     "es6-promise": "^2.0.1",
-    "lodash": "^2.4.1",
+    "lodash": "^3.10.0",
     "mkdirp": "^0.5.1",
     "normalize.css": "^3.0.2",
     "react": "^0.12.2",
