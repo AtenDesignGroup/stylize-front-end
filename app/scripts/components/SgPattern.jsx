@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 var IconButton = require('./IconButton');
+var Code = require('./Code');
 var path = require('path');
 
 var SgPattern = React.createClass({
@@ -25,7 +26,7 @@ var SgPattern = React.createClass({
         <div className="sg-pattern-info" id={infoID} aria-expanded={this.props.infoExpanded} >{this.props.description}</div>
         <iframe src={uri} frameBorder="0" className="sg-pattern-frame"></iframe>
         <pre id={codeID} className="sg-pattern-code language-handlebars" aria-expanded={this.props.codeExpanded} >
-          <code>{this.props.code}</code>
+          <Code code={this.props.code} />
         </pre>
       </div>
     );
