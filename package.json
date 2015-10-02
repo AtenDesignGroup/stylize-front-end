@@ -24,6 +24,7 @@
     "normalize.css": "^3.0.2",
     "react": "^0.12.2",
     "react-html": "^2.1.0",
+    "gulp-load-plugins": "^0.8.0",
     "static-react-router": "https://github.com/pixelwhip/static-react-router.git"
   },
   "devDependencies": {
@@ -34,7 +35,6 @@
     "gulp": "^3.8.10",
     "gulp-changed": "^1.1.0",
     "gulp-filter": "^2.0.0",
-    "gulp-load-plugins": "^0.8.0",
     "gulp-minify-css": "^0.3.11",
     "gulp-minify-html": "^0.1.8",
     "gulp-notify": "^2.1.0",
