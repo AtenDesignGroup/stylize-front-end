@@ -28,7 +28,6 @@ var SgTree = React.createClass({
 
   render: function() {
     var collapsedBookkeeping = this.state.collapsedBookkeeping;
-
     return (
       <div className="sg-drawer-content">
         {this.props.tree.map(function(node, i) {
@@ -50,9 +49,13 @@ var SgTree = React.createClass({
           }
 
           return (
-            <TreeView key={this.props.id + '|' + i} nodeLabel={label} collapsed={collapsedBookkeeping[i]}>
-              <Link to={path}>Show All</Link>
-              {children}
+            <TreeView
+              key={this.props.id + '|' + i}
+              nodeLabel={label}
+              onClick={this.handleClick.bind(null, i)}
+              collapsed={collapsedBookkeeping[i]}>
+                <Link to={path}>Show All</Link>
+                {children}
             </TreeView>
           );
         }, this)}
